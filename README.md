@@ -22,25 +22,25 @@ The simplest approach for accessing your own data is to use a personal access to
 package main
 
 import (
-	"context"
-	"fmt"
-	"os"
+  "context"
+  "fmt"
+  "os"
 
-	"github.com/joho/godotenv"
-	"github.com/lildude/oura"
-	"golang.org/x/oauth2"
+  "github.com/joho/godotenv"
+  "github.com/lildude/oura"
+  "golang.org/x/oauth2"
 )
 
 func main() {
-	godotenv.Load(".env")
-	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
-	ctx := context.Background()
-	tc := oauth2.NewClient(ctx, ts)
+  godotenv.Load(".env")
+  ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
+  ctx := context.Background()
+  tc := oauth2.NewClient(ctx, ts)
 
-	cl := oura.NewClient(tc)
+  cl := oura.NewClient(tc)
 
   userInfo, _, _err_ := cl.UserInfo(ctx)
-	fmt.Println(userInfo.Age, userInfo.Gender, userInfo.Weight, userInfo.Email)
+  fmt.Println(userInfo.Age, userInfo.Gender, userInfo.Weight, userInfo.Email)
 }
 ```
 
