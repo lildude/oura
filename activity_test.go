@@ -59,7 +59,7 @@ func TestActivity(t *testing.T) {
 		got, _, err := client.Activity(context.Background(), "", "")
 		assert.NoError(t, err, "should not return an error")
 
-		want := &Activities{}
+		want := &ActivitySummaries{}
 		json.Unmarshal([]byte(mock), want)
 
 		assert.ObjectsAreEqual(want, got)
