@@ -60,7 +60,7 @@ func TestSleep(t *testing.T) {
 		got, _, err := client.Sleep(context.Background(), "", "")
 		assert.NoError(t, err, "should not return an error")
 
-		want := &Sleeps{}
+		want := &SleepSummaries{}
 		json.Unmarshal([]byte(mock), want)
 
 		assert.ObjectsAreEqual(want, got)
