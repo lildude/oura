@@ -9,23 +9,23 @@ import (
 
 // Readiness represents a single readiness entry
 type Readiness struct {
-	SummaryDate							string	`json:"summary_date"`
-	PeriodID								int			`json:"period_id"`
-	Score										int			`json:"score"`
-	ScorePreviousNight			int			`json:"score_previous_night"`
-	ScoreSleepBalance				int			`json:"score_sleep_balance"`
-	ScorePreviousDay				int			`json:"score_previous_day"`
-	ScoreActivityBalance		int			`json:"score_activity_balance"`
-	ScoreRestingHr					int			`json:"score_resting_hr"`
-	ScoreHrvBalance					int			`json:"score_hrv_balance"`
-	ScoreRecoveryIndex			int			`json:"score_recovery_index"`
-	ScoreTemperature				int			`json:"score_temperature"`
-	RestModeState						int			`json:"rest_mode_state"`
+	SummaryDate          string `json:"summary_date"`
+	PeriodID             int    `json:"period_id"`
+	Score                int    `json:"score"`
+	ScorePreviousNight   int    `json:"score_previous_night"`
+	ScoreSleepBalance    int    `json:"score_sleep_balance"`
+	ScorePreviousDay     int    `json:"score_previous_day"`
+	ScoreActivityBalance int    `json:"score_activity_balance"`
+	ScoreRestingHr       int    `json:"score_resting_hr"`
+	ScoreHrvBalance      int    `json:"score_hrv_balance"`
+	ScoreRecoveryIndex   int    `json:"score_recovery_index"`
+	ScoreTemperature     int    `json:"score_temperature"`
+	RestModeState        int    `json:"rest_mode_state"`
 }
 
 // ReadinessSummaries represents all readiness periods for the period requested
 type ReadinessSummaries struct {
-	ReadinessSummaries			[]Readiness	`json:"readiness"`
+	ReadinessSummaries []Readiness `json:"readiness"`
 }
 
 // Readiness gets all of the readiness entries for a specified period of time.

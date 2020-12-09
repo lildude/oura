@@ -9,17 +9,17 @@ import (
 
 // Bedtime represents a single bedtime recommendation
 type Bedtime struct {
-	Date          	string 											`json:"date"`
-	BedtimeWindow 	struct {
-										Start int `json:"start"`
-										End   int `json:"end"`
-									}														`json:"bedtime_window"`
-	Status 					string 											`json:"status"`
+	Date          string `json:"date"`
+	BedtimeWindow struct {
+		Start int `json:"start"`
+		End   int `json:"end"`
+	} `json:"bedtime_window"`
+	Status string `json:"status"`
 }
 
 // IdealBedtimes represents all ideal bedtimes for the period requested
 type IdealBedtimes struct {
-	IdealBedtimes		[]Bedtime										`json:"ideal_bedtimes"`
+	IdealBedtimes []Bedtime `json:"ideal_bedtimes"`
 }
 
 // Bedtime gets all of the ideal bedtimes for a specified period of time.

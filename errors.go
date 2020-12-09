@@ -11,8 +11,8 @@ func (e Errors) Error() string {
 
 // ErrorDetail holds the details of an error message
 type ErrorDetail struct {
-	Title 	string `json:"title"`
-	Detail 	string `json:"detail"`
+	Title  string `json:"title"`
+	Detail string `json:"detail"`
 }
 
 // Error specifies additional methods on the standard error interface

@@ -10,43 +10,43 @@ import (
 
 // Sleep represents a single sleep entry
 type Sleep struct {
-	SummaryDate				string		`json:"summary_date"`
-  PeriodID					int				`json:"period_id"`
-  IsLongest					int				`json:"is_longest"`
-  Timezone					int				`json:"timezone"`
-  BedtimeStart			time.Time	`json:"bedtime_start"`
-  BedtimeEnd				time.Time	`json:"bedtime_end"`
-  Score							int 			`json:"score"`
-  ScoreTotal				int				`json:"score_total"`
-  ScoreDisturbances	int				`json:"score_disturbances"`
-  ScoreEfficiency		int				`json:"score_efficiency"`
-  ScoreLatency			int				`json:"score_latency"`
-  ScoreRem					int				`json:"score_rem"`
-  ScoreDeep					int				`json:"score_deep"`
-  ScoreAlignment		int				`json:"score_alignment"`
-  Total							int				`json:"total"`
-  Duration					int				`json:"duration"`
-  Awake							int				`json:"awake"`
-  Light							int				`json:"light"`
-  Rem								int				`json:"rem"`
-  Deep							int				`json:"deep"`
-  OnsetLatency			int				`json:"onset_latency"`
-  Restless					int				`json:"restless"`
-  Efficiency				int				`json:"efficiency"`
-  MidpointTime			int				`json:"midpoint_time"`
-  HrLowest					int				`json:"hr_lowest"`
-  HrAverage					float32		`json:"hr_average"`
-  Rmssd							int				`json:"rmssd"`
-  BreathAverage			int				`json:"breath_average"`
-  TemperatureDelta	float32		`json:"temperature_delta"`
-  Hypnogram5Min			string		`json:"hypnogram_5min"`
-  Hr5min						[]int			`json:"hr_5min"`
-  Rmssd5min					[]int			`json:"rmssd_5min"`
+	SummaryDate       string    `json:"summary_date"`
+	PeriodID          int       `json:"period_id"`
+	IsLongest         int       `json:"is_longest"`
+	Timezone          int       `json:"timezone"`
+	BedtimeStart      time.Time `json:"bedtime_start"`
+	BedtimeEnd        time.Time `json:"bedtime_end"`
+	Score             int       `json:"score"`
+	ScoreTotal        int       `json:"score_total"`
+	ScoreDisturbances int       `json:"score_disturbances"`
+	ScoreEfficiency   int       `json:"score_efficiency"`
+	ScoreLatency      int       `json:"score_latency"`
+	ScoreRem          int       `json:"score_rem"`
+	ScoreDeep         int       `json:"score_deep"`
+	ScoreAlignment    int       `json:"score_alignment"`
+	Total             int       `json:"total"`
+	Duration          int       `json:"duration"`
+	Awake             int       `json:"awake"`
+	Light             int       `json:"light"`
+	Rem               int       `json:"rem"`
+	Deep              int       `json:"deep"`
+	OnsetLatency      int       `json:"onset_latency"`
+	Restless          int       `json:"restless"`
+	Efficiency        int       `json:"efficiency"`
+	MidpointTime      int       `json:"midpoint_time"`
+	HrLowest          int       `json:"hr_lowest"`
+	HrAverage         float32   `json:"hr_average"`
+	Rmssd             int       `json:"rmssd"`
+	BreathAverage     int       `json:"breath_average"`
+	TemperatureDelta  float32   `json:"temperature_delta"`
+	Hypnogram5Min     string    `json:"hypnogram_5min"`
+	Hr5min            []int     `json:"hr_5min"`
+	Rmssd5min         []int     `json:"rmssd_5min"`
 }
 
 // SleepSummaries represents all sleep periods for the period requested
 type SleepSummaries struct {
-	SleepSummaries		[]Sleep		`json:"sleep"`
+	SleepSummaries []Sleep `json:"sleep"`
 }
 
 // Sleep gets all of the sleeps for a specified period of time.
