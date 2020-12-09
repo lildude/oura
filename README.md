@@ -43,4 +43,3 @@ func main() {
   fmt.Println(userInfo.Age, userInfo.Gender, userInfo.Weight, userInfo.Email)
 }
 ```
-
