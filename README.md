@@ -1,5 +1,7 @@
 # Oura
 
+![Tests Status Badge](https://github.com/lildude/oura/workflows/Tests/badge.svg)
+
 An unofficial Go client for the [Oura Cloud API](https://cloud.ouraring.com/docs/).
 
 ## Installation
