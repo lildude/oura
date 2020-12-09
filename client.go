@@ -20,11 +20,6 @@ const (
 	userAgent = "go-oura"
 )
 
-// ClientOptions is a set of options that can be specified when creating a Oura client
-type ClientOptions struct {
-	BaseURL *url.URL
-}
-
 // Client holds configuration items for the Oura client and provides methods that interact with the Oura API.
 type Client struct {
 	baseURL *url.URL
@@ -45,13 +40,6 @@ func NewClient(cc *http.Client) *Client {
 	baseURL, _ := url.Parse(BaseURLV1)
 
 	c := &Client{baseURL: baseURL, userAgent: userAgent, client: cc}
-	return c
-}
-
-// NewClientWithOptions takes ClientOptions, configures and returns a new client.
-func NewClientWithOptions(cc *http.Client, opts ClientOptions) *Client {
-	c := NewClient(cc)
-	c.baseURL = opts.BaseURL
 	return c
 }
 

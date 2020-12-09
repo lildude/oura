@@ -21,18 +21,6 @@ func TestNewClient(t *testing.T) {
 	assert.Equal(t, userAgent, c.userAgent, "should configure the client to use the default user-agent")
 }
 
-// TestNewClientWithOptions confirms that a new client can be created by passing
-// in custom ClientOptions.
-func TestNewClientWithOptions(t *testing.T) {
-	baseURL, _ := url.Parse("https://dummyurl:4000")
-	opts := ClientOptions{
-		BaseURL: baseURL,
-	}
-	c := NewClientWithOptions(nil, opts)
-
-	assert.Equal(t, baseURL.String(), c.baseURL.String(), "should configure the client to use the custom url")
-}
-
 // TestNewRequest confirms that NewRequest returns an API request with the
 // correct URL, a correctly encoded body and the correct User-Agent and
 // Content-Type headers set.
@@ -63,15 +51,6 @@ func TestNewRequest(t *testing.T) {
 
 	t.Run("request with an invalid URL", func(tc *testing.T) {
 		_, err := c.NewRequest("GET", ":", nil)
-		assert.Error(tc, err, "should return an error")
-	})
-
-	t.Run("request with an invalid base path", func(tc *testing.T) {
-		u, _ := url.Parse("http://test.local")
-		o := ClientOptions{BaseURL: u}
-		lc := NewClientWithOptions(nil, o)
-
-		_, err := lc.NewRequest("GET", "/", nil)
 		assert.Error(tc, err, "should return an error")
 	})
 
