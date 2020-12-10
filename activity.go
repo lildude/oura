@@ -43,16 +43,16 @@ type Activity struct {
 	RestModeState          int       `json:"rest_mode_state"`
 }
 
-// ActivitySummaries represents all activities for a the period requested
-type ActivitySummaries struct {
-	ActivitySummaries []Activity `json:"activity"`
+// Activities represents all activities for a the period requested
+type Activities struct {
+	Activities []Activity `json:"activity"`
 }
 
-// GetActivity gets all of the activities for a specified period of time.
+// GetActivities gets all of the activities for a specified period of time.
 // If a start and end date are not provided, ie are empty strings, we fall back to Oura which states:
 // 	"If you omit the start date, it will be set to one week ago.
 //	 If you omit the end date, it will be set to the current day."
-func (c *Client) GetActivity(ctx context.Context, start string, end string) (*ActivitySummaries, *http.Response, error) {
+func (c *Client) GetActivities(ctx context.Context, start string, end string) (*Activities, *http.Response, error) {
 	path := "activity"
 	params := url.Values{}
 
@@ -71,7 +71,7 @@ func (c *Client) GetActivity(ctx context.Context, start string, end string) (*Ac
 		return nil, nil, err
 	}
 
-	var activities *ActivitySummaries
+	var activities *Activities
 	resp, err := c.Do(ctx, req, &activities)
 	if err != nil {
 		return activities, resp, err
