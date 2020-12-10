@@ -88,12 +88,12 @@ var readinessTestCases = []struct {
 func TestGetReadiness(t *testing.T) {
 	for _, tc := range readinessTestCases {
 		t.Run(tc.name, func(st *testing.T) {
-			testGetReadiness(st, tc.name, tc.start, tc.end, tc.expectedURL, tc.mock)
+			testGetReadiness(st, tc.start, tc.end, tc.expectedURL, tc.mock)
 		})
 	}
 }
 
-func testGetReadiness(t *testing.T, name, start, end, expectedURL, mock string) {
+func testGetReadiness(t *testing.T, start, end, expectedURL, mock string) {
 	client, mux, _, teardown := setup()
 	defer teardown()
 

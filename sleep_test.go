@@ -112,12 +112,12 @@ var sleepTestCases = []struct {
 func TestGetSleep(t *testing.T) {
 	for _, tc := range sleepTestCases {
 		t.Run(tc.name, func(st *testing.T) {
-			testGetSleep(st, tc.name, tc.start, tc.end, tc.expectedURL, tc.mock)
+			testGetSleep(st, tc.start, tc.end, tc.expectedURL, tc.mock)
 		})
 	}
 }
 
-func testGetSleep(t *testing.T, name, start, end, expectedURL, mock string) {
+func testGetSleep(t *testing.T, start, end, expectedURL, mock string) {
 	client, mux, _, teardown := setup()
 	defer teardown()
 
