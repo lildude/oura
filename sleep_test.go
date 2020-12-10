@@ -11,16 +11,16 @@ import (
 )
 
 var sleepTestCases = []struct {
-	name string
-	start string
-	end string
+	name        string
+	start       string
+	end         string
 	expectedURL string
-	mock string
+	mock        string
 }{
 	{
-		name: "get sleep without specific dates",
-		start: "",
-		end: "",
+		name:        "get sleep without specific dates",
+		start:       "",
+		end:         "",
 		expectedURL: "/sleep",
 		mock: `{
 			"sleep": [{
@@ -60,9 +60,9 @@ var sleepTestCases = []struct {
 		}`,
 	},
 	{
-		name: "get sleep with only start date",
-		start: "2020-01-20",
-		end: "",
+		name:        "get sleep with only start date",
+		start:       "2020-01-20",
+		end:         "",
 		expectedURL: "/sleep?start=2020-01-20",
 		mock: `{
 			"sleep": [
@@ -86,9 +86,9 @@ var sleepTestCases = []struct {
 		}`,
 	},
 	{
-		name: "get sleep with start and end dates",
-		start: "2020-01-20",
-		end: "2020-01-22",
+		name:        "get sleep with start and end dates",
+		start:       "2020-01-20",
+		end:         "2020-01-22",
 		expectedURL: "/sleep?end=2020-01-22&start=2020-01-20",
 		mock: `{
 			"sleep": [

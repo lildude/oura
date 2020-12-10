@@ -18,9 +18,9 @@ var bedtimeTestCases = []struct {
 	mock        string
 }{
 	{
-		name: "get bedtime without specific dates",
-		start: "",
-		end: "",
+		name:        "get bedtime without specific dates",
+		start:       "",
+		end:         "",
 		expectedURL: "",
 		mock: `{
 			"ideal_bedtimes": [
@@ -44,9 +44,9 @@ var bedtimeTestCases = []struct {
 		}`,
 	},
 	{
-		name: "get bedtime with only start date",
-		start: "2020-01-20",
-		end: "",
+		name:        "get bedtime with only start date",
+		start:       "2020-01-20",
+		end:         "",
 		expectedURL: "/bedtime?start=2020-01-20",
 		mock: `{
 			"ideal_bedtimes": [
@@ -70,9 +70,9 @@ var bedtimeTestCases = []struct {
 		}`,
 	},
 	{
-		name: "get bedtime with start and end dates",
-		start: "2020-01-20",
-		end: "2020-01-22",
+		name:        "get bedtime with start and end dates",
+		start:       "2020-01-20",
+		end:         "2020-01-22",
 		expectedURL: "/bedtime?end=2020-01-22&start=2020-01-20",
 		mock: `{
 			"ideal_bedtimes": [

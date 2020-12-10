@@ -18,9 +18,9 @@ var activitiesTestCases = []struct {
 	mock        string
 }{
 	{
-		name: "get activity without specific dates",
-		start: "",
-		end: "",
+		name:        "get activity without specific dates",
+		start:       "",
+		end:         "",
 		expectedURL: "/activity",
 		mock: `{
 			"activity": [{
@@ -59,9 +59,9 @@ var activitiesTestCases = []struct {
 		}`,
 	},
 	{
-		name: "get activity with only start date",
-		start: "2020-01-20",
-		end: "",
+		name:        "get activity with only start date",
+		start:       "2020-01-20",
+		end:         "",
 		expectedURL: "/activity?start=2020-01-20",
 		mock: `{
 			"activity": [
@@ -73,9 +73,9 @@ var activitiesTestCases = []struct {
 		}`,
 	},
 	{
-		name: "get activity with start and end dates",
-		start: "2020-01-20",
-		end: "2020-01-22",
+		name:        "get activity with start and end dates",
+		start:       "2020-01-20",
+		end:         "2020-01-22",
 		expectedURL: "/activity?end=2020-01-22&start=2020-01-20",
 		mock: `{
 			"activity": [

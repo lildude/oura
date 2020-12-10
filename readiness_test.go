@@ -11,16 +11,16 @@ import (
 )
 
 var readinessTestCases = []struct {
-	name string
-	start string
-	end string
+	name        string
+	start       string
+	end         string
 	expectedURL string
-	mock string
+	mock        string
 }{
 	{
-		name: "get readiness without specific dates",
-		start: "",
-		end: "",
+		name:        "get readiness without specific dates",
+		start:       "",
+		end:         "",
 		expectedURL: "/readiness",
 		mock: `{
 			"readiness": [{
@@ -40,9 +40,9 @@ var readinessTestCases = []struct {
 		}`,
 	},
 	{
-		name: "get readiness with only start date",
-		start: "2020-01-20",
-		end: "",
+		name:        "get readiness with only start date",
+		start:       "2020-01-20",
+		end:         "",
 		expectedURL: "/readiness?start=2020-01-20",
 		mock: `{
 			"readiness": [{
@@ -64,9 +64,9 @@ var readinessTestCases = []struct {
 		}`,
 	},
 	{
-		name: "get readiness with start and end dates",
-		start: "2020-01-20",
-		end: "2020-01-22",
+		name:        "get readiness with start and end dates",
+		start:       "2020-01-20",
+		end:         "2020-01-22",
 		expectedURL: "/readiness?end=2020-01-22&start=2020-01-20",
 		mock: `{
 			"readiness": [{
