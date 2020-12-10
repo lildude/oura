@@ -57,7 +57,7 @@ func TestSleep(t *testing.T) {
 			fmt.Fprint(w, mock)
 		})
 
-		got, _, err := client.Sleep(context.Background(), "", "")
+		got, _, err := client.GetSleep(context.Background(), "", "")
 		assert.NoError(t, err, "should not return an error")
 
 		want := &SleepSummaries{}
@@ -76,7 +76,7 @@ func TestSleep(t *testing.T) {
 			fmt.Fprint(w, mock)
 		})
 
-		_, _, err := client.Sleep(context.Background(), "2020-01-20", "")
+		_, _, err := client.GetSleep(context.Background(), "2020-01-20", "")
 		assert.NoError(t, err, "should not return an error")
 	})
 
@@ -90,7 +90,7 @@ func TestSleep(t *testing.T) {
 			fmt.Fprint(w, mock)
 		})
 
-		_, _, err := client.Sleep(context.Background(), "2020-01-20", "2020-01-25")
+		_, _, err := client.GetSleep(context.Background(), "2020-01-20", "2020-01-25")
 		assert.NoError(t, err, "should not return an error")
 	})
 }

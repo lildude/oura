@@ -28,11 +28,11 @@ type ReadinessSummaries struct {
 	ReadinessSummaries []Readiness `json:"readiness"`
 }
 
-// Readiness gets all of the readiness entries for a specified period of time.
+// GetReadiness gets all of the readiness entries for a specified period of time.
 // If a start and end date are not provided, ie are empty strings, we fall back to Oura which states:
 // 	"If you omit the start date, it will be set to one week ago.
 //	 If you omit the end date, it will be set to the current day."
-func (c *Client) Readiness(ctx context.Context, start string, end string) (*ReadinessSummaries, *http.Response, error) {
+func (c *Client) GetReadiness(ctx context.Context, start string, end string) (*ReadinessSummaries, *http.Response, error) {
 	path := "readiness"
 	params := url.Values{}
 

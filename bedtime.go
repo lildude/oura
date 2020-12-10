@@ -22,11 +22,11 @@ type IdealBedtimes struct {
 	IdealBedtimes []Bedtime `json:"ideal_bedtimes"`
 }
 
-// Bedtime gets all of the ideal bedtimes for a specified period of time.
+// GetBedtime gets all of the ideal bedtimes for a specified period of time.
 // If a start and end date are not provided, ie are empty strings, we fall back to Oura which states:
 // 	"If you omit the start date, it will be set to one week ago.
 //	 If you omit the end date, it will be set to the current day."
-func (c *Client) Bedtime(ctx context.Context, start string, end string) (*IdealBedtimes, *http.Response, error) {
+func (c *Client) GetBedtime(ctx context.Context, start string, end string) (*IdealBedtimes, *http.Response, error) {
 	path := "bedtime"
 	params := url.Values{}
 

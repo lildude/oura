@@ -26,7 +26,7 @@ func TestUserInfo(t *testing.T) {
 		fmt.Fprint(w, mock)
 	})
 
-	got, _, err := client.UserInfo(context.Background())
+	got, _, err := client.GetUserInfo(context.Background())
 	assert.NoError(t, err, "should not return an error")
 
 	want := &UserInfo{}

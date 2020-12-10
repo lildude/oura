@@ -37,7 +37,7 @@ func TestReadiness(t *testing.T) {
 			fmt.Fprint(w, mock)
 		})
 
-		got, _, err := client.Readiness(context.Background(), "", "")
+		got, _, err := client.GetReadiness(context.Background(), "", "")
 		assert.NoError(t, err, "should not return an error")
 
 		want := &ReadinessSummaries{}
@@ -56,7 +56,7 @@ func TestReadiness(t *testing.T) {
 			fmt.Fprint(w, mock)
 		})
 
-		_, _, err := client.Readiness(context.Background(), "2020-01-20", "")
+		_, _, err := client.GetReadiness(context.Background(), "2020-01-20", "")
 		assert.NoError(t, err, "should not return an error")
 	})
 
@@ -70,7 +70,7 @@ func TestReadiness(t *testing.T) {
 			fmt.Fprint(w, mock)
 		})
 
-		_, _, err := client.Readiness(context.Background(), "2020-01-20", "2020-01-25")
+		_, _, err := client.GetReadiness(context.Background(), "2020-01-20", "2020-01-25")
 		assert.NoError(t, err, "should not return an error")
 	})
 }

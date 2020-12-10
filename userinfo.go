@@ -13,8 +13,8 @@ type UserInfo struct {
 	Email  string `json:"email"`
 }
 
-// UserInfo returns the user information for the current user
-func (c *Client) UserInfo(ctx context.Context) (*UserInfo, *http.Response, error) {
+// GetUserInfo returns the user information for the current user
+func (c *Client) GetUserInfo(ctx context.Context) (*UserInfo, *http.Response, error) {
 	req, err := c.NewRequest("GET", "userinfo", nil)
 	if err != nil {
 		return nil, nil, err

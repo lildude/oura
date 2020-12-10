@@ -41,7 +41,7 @@ func TestBedtime(t *testing.T) {
 			fmt.Fprint(w, mock)
 		})
 
-		got, _, err := client.Bedtime(context.Background(), "", "")
+		got, _, err := client.GetBedtime(context.Background(), "", "")
 		assert.NoError(t, err, "should not return an error")
 
 		want := &IdealBedtimes{}
@@ -60,7 +60,7 @@ func TestBedtime(t *testing.T) {
 			fmt.Fprint(w, mock)
 		})
 
-		_, _, err := client.Bedtime(context.Background(), "2020-01-20", "")
+		_, _, err := client.GetBedtime(context.Background(), "2020-01-20", "")
 		assert.NoError(t, err, "should not return an error")
 	})
 
@@ -74,7 +74,7 @@ func TestBedtime(t *testing.T) {
 			fmt.Fprint(w, mock)
 		})
 
-		_, _, err := client.Bedtime(context.Background(), "2020-01-20", "2020-01-25")
+		_, _, err := client.GetBedtime(context.Background(), "2020-01-20", "2020-01-25")
 		assert.NoError(t, err, "should not return an error")
 	})
 }

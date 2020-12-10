@@ -56,7 +56,7 @@ func TestActivity(t *testing.T) {
 			fmt.Fprint(w, mock)
 		})
 
-		got, _, err := client.Activity(context.Background(), "", "")
+		got, _, err := client.GetActivity(context.Background(), "", "")
 		assert.NoError(t, err, "should not return an error")
 
 		want := &ActivitySummaries{}
@@ -75,7 +75,7 @@ func TestActivity(t *testing.T) {
 			fmt.Fprint(w, mock)
 		})
 
-		_, _, err := client.Activity(context.Background(), "2020-01-20", "")
+		_, _, err := client.GetActivity(context.Background(), "2020-01-20", "")
 		assert.NoError(t, err, "should not return an error")
 	})
 
@@ -89,7 +89,7 @@ func TestActivity(t *testing.T) {
 			fmt.Fprint(w, mock)
 		})
 
-		_, _, err := client.Activity(context.Background(), "2020-01-20", "2020-01-25")
+		_, _, err := client.GetActivity(context.Background(), "2020-01-20", "2020-01-25")
 		assert.NoError(t, err, "should not return an error")
 	})
 }

@@ -22,6 +22,6 @@ func Example() {
 
 	cl := oura.NewClient(tc)
 
-	userInfo, _, _ := cl.UserInfo(ctx)
+	userInfo, _, _ := cl.GetUserInfo(ctx)
 	fmt.Println(userInfo.Age, userInfo.Gender, userInfo.Weight, userInfo.Email)
 }
