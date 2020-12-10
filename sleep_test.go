@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var testCases = []struct {
+var sleepTestCases = []struct {
 	name string
 	start string
 	end string
@@ -110,7 +110,7 @@ var testCases = []struct {
 }
 
 func TestGetSleep(t *testing.T) {
-	for _, tc := range testCases {
+	for _, tc := range sleepTestCases {
 		t.Run(tc.name, func(st *testing.T) {
 			testGetSleep(st, tc.name, tc.start, tc.end, tc.expectedURL, tc.mock)
 		})
