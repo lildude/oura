@@ -37,7 +37,7 @@ type Sleep struct {
 	HrLowest          int       `json:"hr_lowest"`
 	HrAverage         float32   `json:"hr_average"`
 	Rmssd             int       `json:"rmssd"`
-	BreathAverage     int       `json:"breath_average"`
+	BreathAverage     float32   `json:"breath_average"`
 	TemperatureDelta  float32   `json:"temperature_delta"`
 	Hypnogram5Min     string    `json:"hypnogram_5min"`
 	Hr5min            []int     `json:"hr_5min"`
