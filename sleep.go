@@ -44,16 +44,16 @@ type Sleep struct {
 	Rmssd5min         []int     `json:"rmssd_5min"`
 }
 
-// SleepSummaries represents all sleep periods for the period requested
-type SleepSummaries struct {
-	SleepSummaries []Sleep `json:"sleep"`
+// Sleeps represents all sleep periods for the period requested
+type Sleeps struct {
+	Sleeps []Sleep `json:"sleep"`
 }
 
 // GetSleep gets all of the sleeps for a specified period of time.
 // If a start and end date are not provided, ie are empty strings, we fall back to Oura which states:
 // 	"If you omit the start date, it will be set to one week ago.
 //	 If you omit the end date, it will be set to the current day."
-func (c *Client) GetSleep(ctx context.Context, start string, end string) (*SleepSummaries, *http.Response, error) {
+func (c *Client) GetSleep(ctx context.Context, start string, end string) (*Sleeps, *http.Response, error) {
 	path := "sleep"
 	params := url.Values{}
 
@@ -72,7 +72,7 @@ func (c *Client) GetSleep(ctx context.Context, start string, end string) (*Sleep
 		return nil, nil, err
 	}
 
-	var sleepSummaries *SleepSummaries
+	var sleepSummaries *Sleeps
 	resp, err := c.Do(ctx, req, &sleepSummaries)
 	if err != nil {
 		return sleepSummaries, resp, err

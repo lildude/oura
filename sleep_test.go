@@ -130,7 +130,7 @@ func testGetSleep(t *testing.T, start, end, expectedURL, mock string) {
 	got, _, err := client.GetSleep(context.Background(), start, end)
 	assert.NoError(t, err, "should not return an error")
 
-	want := &SleepSummaries{}
+	want := &Sleeps{}
 	json.Unmarshal([]byte(mock), want)
 
 	assert.ObjectsAreEqual(want, got)
