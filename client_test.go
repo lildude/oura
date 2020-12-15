@@ -18,7 +18,7 @@ func TestNewClient(t *testing.T) {
 	c := NewClient(nil, "Testing/0.0.1")
 
 	assert.Equal(t, BaseURLV1, c.baseURL.String(), "should configure the client to use the default url")
-	assert.Equal(t, "Testing/0.0.1 (go-oura/dev)", c.userAgent, "should configure the client to use the default user-agent")
+	assert.Equal(t, fmt.Sprintf("Testing/0.0.1 (go-oura/%s)", version), c.userAgent, "should configure the client to use the default user-agent")
 }
 
 // TestNewRequest confirms that NewRequest returns an API request with the
