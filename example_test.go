@@ -20,7 +20,7 @@ func Example() {
 	ctx := context.Background()
 	tc := oauth2.NewClient(ctx, ts)
 
-	cl := oura.NewClient(tc)
+	cl := oura.NewClient(tc, "go-oura Testing")
 
 	userInfo, _, _ := cl.GetUserInfo(ctx)
 	fmt.Println(userInfo.Age, userInfo.Gender, userInfo.Weight, userInfo.Email)

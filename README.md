@@ -18,6 +18,8 @@ Depending on your requirements, you will need an access token to query the API. 
 
 See the section on Authentication in the [Oura Cloud API Docs](https://cloud.ouraring.com/docs) for more information the authentication methods.
 
+You will need to provide an application name as a string when initialising the client. This is used in the user agent when querying the API and is used to identify applications that are accessing the API and enable Oura to contact the application author if there are problems. So pick a name that stands out!
+
 The simplest approach for accessing your own data is to use a personal access token like this:
 
 ```go
@@ -39,9 +41,12 @@ func main() {
   ctx := context.Background()
   tc := oauth2.NewClient(ctx, ts)
 
-  cl := oura.NewClient(tc)
+  cl := oura.NewClient(tc, "My Cool App/3.2.1")
 
   userInfo, _, _err_ := cl.UserInfo(ctx)
+  if err != nil {
+    fmt.Println(err)
+  }
   fmt.Println(userInfo.Age, userInfo.Gender, userInfo.Weight, userInfo.Email)
 }
 ```
