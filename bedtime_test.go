@@ -21,7 +21,7 @@ var bedtimeTestCases = []struct {
 		name:        "get bedtime without specific dates",
 		start:       "",
 		end:         "",
-		expectedURL: "",
+		expectedURL: "/bedtime",
 		mock: `{
 			"ideal_bedtimes": [
 				{
@@ -65,7 +65,7 @@ var bedtimeTestCases = []struct {
 				{
 					"date": "2020-01-23",
 					"status": "LOW_SLEEP_SCORES"
-				},
+				}
 			]
 		}`,
 	},
@@ -91,6 +91,14 @@ var bedtimeTestCases = []struct {
 			]
 		}`,
 	},
+}
+
+func TestGetBedtime(t *testing.T) {
+	for _, tc := range bedtimeTestCases {
+		t.Run(tc.name, func(st *testing.T) {
+			testGetBedtime(st, tc.start, tc.end, tc.expectedURL, tc.mock)
+		})
+	}
 }
 
 func testGetBedtime(t *testing.T, start, end, expectedURL, mock string) {
