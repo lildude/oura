@@ -50,7 +50,7 @@ func NewClient(cc *http.Client, appName string) *Client {
 // it will be JSON encoded and included in the request.
 // Inspiration: https://github.com/google/go-github/blob/master/github/github.go
 func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Request, error) {
-	if strings.HasSuffix(c.baseURL.Path, "/") == false {
+	if !strings.HasSuffix(c.baseURL.Path, "/") {
 		return nil, fmt.Errorf("client baseURL does not have a trailing slash: %q", c.baseURL)
 	}
 
