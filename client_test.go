@@ -18,7 +18,7 @@ func TestNewClient(t *testing.T) {
 	c := NewClient(nil, "Testing/0.0.1")
 
 	assert.Equal(t, BaseURLV1, c.baseURL.String(), "should configure the client to use the default url")
-	assert.Equal(t, fmt.Sprintf("Testing/0.0.1 (go-oura/%s)", version), c.userAgent, "should configure the client to use the default user-agent")
+	assert.Equal(t, fmt.Sprintf("Testing/0.0.1 (go-oura/%s)", version), c.UserAgent, "should configure the client to use the default user-agent")
 }
 
 // TestNewRequest confirms that NewRequest returns an API request with the
@@ -39,7 +39,7 @@ func TestNewRequest(t *testing.T) {
 
 		body, _ := ioutil.ReadAll(req.Body)
 		assert.Equal(tc, outBody, string(body), "should encode the request body as JSON")
-		assert.Equal(tc, c.userAgent, req.Header.Get("User-Agent"), "should pass the correct user agent")
+		assert.Equal(tc, c.UserAgent, req.Header.Get("User-Agent"), "should pass the correct user agent")
 		assert.Equal(tc, "application/json", req.Header.Get("Content-Type"), "should set the content-type as application/json")
 	})
 
