@@ -17,8 +17,7 @@ import (
 var (
 	// BaseURLV1 is Oura's v1 API endpoint
 	BaseURLV1 = "https://api.ouraring.com/v1/"
-	version = "dev"
-	userAgent = fmt.Sprintf("go-oura/%s", version)
+	userAgent = "go-oura"
 )
 
 // Client holds configuration items for the Oura client and provides methods that interact with the Oura API.
@@ -34,14 +33,13 @@ type Client struct {
 // authentication, provide an http.Client that will perform the authentication
 // for you (such as that provided by the golang.org/x/oauth2 library).
 // Inspiration: https://github.com/google/go-github/blob/master/github/github.go
-func NewClient(cc *http.Client, appName string) *Client {
+func NewClient(cc *http.Client) *Client {
 	if cc == nil {
 		cc = http.DefaultClient
 	}
 	baseURL, _ := url.Parse(BaseURLV1)
-	ua := fmt.Sprintf("%s (%s)", appName, userAgent)
 
-	c := &Client{baseURL: baseURL, UserAgent: ua, client: cc}
+	c := &Client{baseURL: baseURL, UserAgent: userAgent, client: cc}
 	return c
 }
 

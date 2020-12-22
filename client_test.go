@@ -15,17 +15,17 @@ import (
 // TestNewClient confirms that a client can be created with the default baseURL
 // and default User-Agent.
 func TestNewClient(t *testing.T) {
-	c := NewClient(nil, "Testing/0.0.1")
+	c := NewClient(nil)
 
 	assert.Equal(t, BaseURLV1, c.baseURL.String(), "should configure the client to use the default url")
-	assert.Equal(t, fmt.Sprintf("Testing/0.0.1 (go-oura/%s)", version), c.UserAgent, "should configure the client to use the default user-agent")
+	assert.Equal(t, "go-oura", c.UserAgent, "should configure the client to use the default user-agent")
 }
 
 // TestNewRequest confirms that NewRequest returns an API request with the
 // correct URL, a correctly encoded body and the correct User-Agent and
 // Content-Type headers set.
 func TestNewRequest(t *testing.T) {
-	c := NewClient(nil, "Testing/0.0.1")
+	c := NewClient(nil)
 
 	t.Run("valid request", func(tc *testing.T) {
 
@@ -210,7 +210,7 @@ func setup() (client *Client, mux *http.ServeMux, serverURL string, teardown fun
 	mux = http.NewServeMux()
 	server := httptest.NewServer(mux)
 
-	c := NewClient(nil, "Testing/0.0.1")
+	c := NewClient(nil)
 	url, _ := url.Parse(server.URL + "/")
 	c.baseURL = url
 
