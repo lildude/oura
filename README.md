@@ -48,3 +48,8 @@ func main() {
   fmt.Println(userInfo.Age, userInfo.Gender, userInfo.Weight, userInfo.Email)
 }
 ```
+
+## Releasing
+
+This project uses [GoReleaser](https://goreleaser.com) via GitHub Actions to make the releases quick and easy. When I'm ready for a new release, I push a new tag and the workflow takes care of things.
+
