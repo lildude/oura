@@ -9,11 +9,11 @@ import (
 
 // Bedtime represents a single bedtime recommendation
 type Bedtime struct {
-	Date          string `json:"date"`
 	BedtimeWindow struct {
 		Start int `json:"start"`
 		End   int `json:"end"`
 	} `json:"bedtime_window"`
+	Date   string `json:"date"`
 	Status string `json:"status"`
 }
 
