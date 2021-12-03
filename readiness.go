@@ -9,18 +9,18 @@ import (
 
 // Readiness represents a single readiness entry
 type Readiness struct {
-	SummaryDate          string `json:"summary_date"`
 	PeriodID             int    `json:"period_id"`
-	Score                int    `json:"score"`
-	ScorePreviousNight   int    `json:"score_previous_night"`
-	ScoreSleepBalance    int    `json:"score_sleep_balance"`
-	ScorePreviousDay     int    `json:"score_previous_day"`
-	ScoreActivityBalance int    `json:"score_activity_balance"`
-	ScoreRestingHr       int    `json:"score_resting_hr"`
-	ScoreHrvBalance      int    `json:"score_hrv_balance"`
-	ScoreRecoveryIndex   int    `json:"score_recovery_index"`
-	ScoreTemperature     int    `json:"score_temperature"`
 	RestModeState        int    `json:"rest_mode_state"`
+	Score                int    `json:"score"`
+	ScoreActivityBalance int    `json:"score_activity_balance"`
+	ScoreHrvBalance      int    `json:"score_hrv_balance"`
+	ScorePreviousDay     int    `json:"score_previous_day"`
+	ScorePreviousNight   int    `json:"score_previous_night"`
+	ScoreRecoveryIndex   int    `json:"score_recovery_index"`
+	ScoreRestingHr       int    `json:"score_resting_hr"`
+	ScoreSleepBalance    int    `json:"score_sleep_balance"`
+	ScoreTemperature     int    `json:"score_temperature"`
+	SummaryDate          string `json:"summary_date"`
 }
 
 // ReadinessSummaries represents all readiness periods for the period requested

@@ -10,37 +10,43 @@ import (
 
 // Activity represents a single activity
 type Activity struct {
-	SummaryDate            string    `json:"summary_date"`
-	DayStart               time.Time `json:"day_start"`
-	DayEnd                 time.Time `json:"day_end"`
-	Timezone               int       `json:"timezone"`
-	Score                  int       `json:"score"`
-	ScoreStayActive        int       `json:"score_stay_active"`
-	ScoreMoveEveryHour     int       `json:"score_move_every_hour"`
-	ScoreMeetDailyTargets  int       `json:"score_meet_daily_targets"`
-	ScoreTrainingFrequency int       `json:"score_training_frequency"`
-	ScoreTrainingVolume    int       `json:"score_training_volume"`
-	ScoreRecoveryTime      int       `json:"score_recovery_time"`
+	AverageMet             float32   `json:"average_met"`
+	CalActive              int       `json:"cal_active"`
+	CalTotal               int       `json:"cal_total"`
+	Class5min              string    `json:"class_5min"`
 	DailyMovement          int       `json:"daily_movement"`
-	NonWear                int       `json:"non_wear"`
-	Rest                   int       `json:"rest"`
+	DayEnd                 time.Time `json:"day_end"`
+	DayStart               time.Time `json:"day_start"`
+	High                   int       `json:"high"`
 	Inactive               int       `json:"inactive"`
 	InactivityAlerts       int       `json:"inactivity_alerts"`
 	Low                    int       `json:"low"`
 	Medium                 int       `json:"medium"`
-	High                   int       `json:"high"`
-	Steps                  int       `json:"steps"`
-	CalTotal               int       `json:"cal_total"`
-	CalActive              int       `json:"cal_active"`
+	Met1min                []float32 `json:"met_1min"`
+	MetMinHigh             int       `json:"met_min_high"`
 	MetMinInactive         int       `json:"met_min_inactive"`
 	MetMinLow              int       `json:"met_min_low"`
-	MetMinMediumPlus       int       `json:"met_min_medium_plus"`
 	MetMinMedium           int       `json:"met_min_medium"`
-	MetMinHigh             int       `json:"met_min_high"`
-	AverageMet             float32   `json:"average_met"`
-	Class5min              string    `json:"class_5min"`
-	Met1min                []float32 `json:"met_1min"`
+	MetMinMediumPlus       int       `json:"met_min_medium_plus"`
+	NonWear                int       `json:"non_wear"`
+	Rest                   int       `json:"rest"`
 	RestModeState          int       `json:"rest_mode_state"`
+	Score                  int       `json:"score"`
+	ScoreMeetDailyTargets  int       `json:"score_meet_daily_targets"`
+	ScoreMoveEveryHour     int       `json:"score_move_every_hour"`
+	ScoreRecoveryTime      int       `json:"score_recovery_time"`
+	ScoreStayActive        int       `json:"score_stay_active"`
+	ScoreTrainingFrequency int       `json:"score_training_frequency"`
+	ScoreTrainingVolume    int       `json:"score_training_volume"`
+	Steps                  int       `json:"steps"`
+	SummaryDate            string    `json:"summary_date"`
+	TargetCalories         int       `json:"target_calories"`
+	TargetKm               float32   `json:"target_km"`
+	TargetMiles            float32   `json:"target_miles"`
+	Timezone               int       `json:"timezone"`
+	ToTargetKm             float32   `json:"to_target_km"`
+	ToTargetMiles          float32   `json:"to_target_miles"`
+	Total                  int       `json:"total"`
 }
 
 // Activities represents all activities for a the period requested

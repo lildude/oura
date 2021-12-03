@@ -19,27 +19,31 @@ var infoTestCases = []struct {
 		mock: `{
 			"age": 27,
 			"weight": 80,
+			"height": 180,
 			"gender": "male",
 			"email": "john.doe@the.domain"
 		}`,
 		expected: UserInfo{
 			Age:    27,
 			Weight: 80.0,
+			Height: 180,
 			Gender: "male",
 			Email:  "john.doe@the.domain",
 		},
 	},
 	{
-		name: "Info w/ weight as float",
+		name: "Info w/ weight & height as float",
 		mock: `{
 			"age": 27,
 			"weight": 80.0,
+			"height": 180.0,
 			"gender": "male",
 			"email": "john.doe@the.domain"
 		}`,
 		expected: UserInfo{
 			Age:    27,
 			Weight: 80.0,
+			Height: 180.0,
 			Gender: "male",
 			Email:  "john.doe@the.domain",
 		},
