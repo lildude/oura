@@ -30,7 +30,7 @@ func TestNewRequest(t *testing.T) {
 	t.Run("valid request", func(tc *testing.T) {
 
 		inURL, outURL := "foo", BaseURLV1+"foo"
-		inBody, outBody := &UserInfo{Age: 99, Weight: 102, Gender: "ano", Email: "user@example.com"}, `{"age":99,"weight":102,"gender":"ano","email":"user@example.com"}`+"\n"
+		inBody, outBody := &UserInfo{Age: 99, Weight: 102, Gender: "ano", Email: "user@example.com", Height: 184}, `{"age":99,"email":"user@example.com","gender":"ano","height":184,"weight":102}`+"\n"
 
 		req, err := c.NewRequest("GET", inURL, inBody)
 
