@@ -8,9 +8,10 @@ import (
 // UserInfo is the information for the current user
 type UserInfo struct {
 	Age    int     `json:"age"`
-	Weight float64 `json:"weight"`
-	Gender string  `json:"gender"`
 	Email  string  `json:"email"`
+	Gender string  `json:"gender"`
+	Height float64 `json:"height"`
+	Weight float64 `json:"weight"`
 }
 
 // GetUserInfo returns the user information for the current user
