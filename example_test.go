@@ -14,7 +14,7 @@ import (
 // See the documentation on [Testing](https://golang.org/pkg/testing/#hdr-Examples)
 // for further details.
 
-func Example_GetUserInfo() {
+func Example_getUserInfo() {
 	godotenv.Load(".env")
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
 	ctx := context.Background()
@@ -32,7 +32,7 @@ func Example_GetUserInfo() {
 	// Output
 }
 
-func Example_GetSleep() {
+func Example_getSleep() {
 	godotenv.Load(".env")
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
 	ctx := context.Background()
@@ -50,7 +50,7 @@ func Example_GetSleep() {
 	// Output
 }
 
-func Example_GetActivities() {
+func Example_getActivities() {
 	godotenv.Load(".env")
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
 	ctx := context.Background()
