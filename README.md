@@ -41,7 +41,7 @@ func main() {
 
   cl := oura.NewClient(tc)
 
-  userInfo, _, _err_ := cl.GetUserInfo(ctx)
+  userInfo, _, err := cl.GetUserInfo(ctx)
   if err != nil {
     fmt.Println(err)
   }
