@@ -67,3 +67,20 @@ func Example_getActivities() {
 	}
 	// Output
 }
+
+func Example_dailyActivity() {
+	godotenv.Load(".env")
+	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
+	ctx := context.Background()
+	tc := oauth2.NewClient(ctx, ts)
+
+	cl := oura.NewClient(tc)
+	dailyActivity, httpResp, err := cl.DailyActivity(ctx, "2022-03-20", "2022-03-22", "")
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println(httpResp)
+	} else {
+		fmt.Println(dailyActivity)
+	}
+	// Output
+}
