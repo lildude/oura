@@ -21,11 +21,11 @@ type Heartrates struct {
 	NextToken string      `json:"next_token"`
 }
 
-// Heartrate gets the heart rate data for a specified Oura user within a given timeframe.
+// Heartrates gets the heart rate data for a specified Oura user within a given timeframe.
 // If a start and end date are not provided, ie are empty strings, we fall back to Oura's defaults which are:
 // 	start_datetime: end_datetime - 1 day
 //	end_datetime: current UTC date
-func (c *Client) Heartrate(ctx context.Context, start_datetime, end_datetime, next_token string) (*Heartrates, *http.Response, error) {
+func (c *Client) Heartrates(ctx context.Context, start_datetime, end_datetime, next_token string) (*Heartrates, *http.Response, error) {
 	path := "v2/usercollection/heartrate"
 	params := url.Values{}
 

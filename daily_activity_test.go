@@ -102,15 +102,15 @@ var dailyActivityCases = []struct {
 	},
 }
 
-func TestDailyActivity(t *testing.T) {
+func TestDailyActivities(t *testing.T) {
 	for _, tc := range dailyActivityCases {
 		t.Run(tc.name, func(t *testing.T) {
-			testDailyActivity(t, tc.start_date, tc.end_date, tc.next_token, tc.expectedURL, tc.mock)
+			testDailyActivities(t, tc.start_date, tc.end_date, tc.next_token, tc.expectedURL, tc.mock)
 		})
 	}
 }
 
-func testDailyActivity(t *testing.T, start_date, end_date, next_token, expectedURL, mock string) {
+func testDailyActivities(t *testing.T, start_date, end_date, next_token, expectedURL, mock string) {
 	client, mux, _, teardown := setup()
 	defer teardown()
 
@@ -120,7 +120,7 @@ func testDailyActivity(t *testing.T, start_date, end_date, next_token, expectedU
 		fmt.Fprint(w, mock)
 	})
 
-	got, _, err := client.DailyActivity(context.Background(), start_date, end_date, next_token)
+	got, _, err := client.DailyActivities(context.Background(), start_date, end_date, next_token)
 	assert.NoError(t, err, "should not return an error")
 
 	want := &DailyActivities{}

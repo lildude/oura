@@ -73,15 +73,15 @@ var tagCases = []struct {
 	},
 }
 
-func TestTag(t *testing.T) {
+func TestTags(t *testing.T) {
 	for _, tc := range tagCases {
 		t.Run(tc.name, func(t *testing.T) {
-			testTag(t, tc.start_date, tc.end_date, tc.next_token, tc.expectedURL, tc.mock)
+			testTags(t, tc.start_date, tc.end_date, tc.next_token, tc.expectedURL, tc.mock)
 		})
 	}
 }
 
-func testTag(t *testing.T, start_date, end_date, next_token, expectedURL, mock string) {
+func testTags(t *testing.T, start_date, end_date, next_token, expectedURL, mock string) {
 	client, mux, _, teardown := setup()
 	defer teardown()
 
@@ -91,7 +91,7 @@ func testTag(t *testing.T, start_date, end_date, next_token, expectedURL, mock s
 		fmt.Fprint(w, mock)
 	})
 
-	got, _, err := client.Tag(context.Background(), start_date, end_date, next_token)
+	got, _, err := client.Tags(context.Background(), start_date, end_date, next_token)
 	assert.NoError(t, err, "should not return an error")
 
 	want := &Sessions{}

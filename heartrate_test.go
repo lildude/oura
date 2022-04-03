@@ -76,15 +76,15 @@ var heartrateCases = []struct {
 	},
 }
 
-func TestHeartrate(t *testing.T) {
+func TestHeartrates(t *testing.T) {
 	for _, tc := range heartrateCases {
 		t.Run(tc.name, func(t *testing.T) {
-			testHeartrate(t, tc.start_date, tc.end_date, tc.next_token, tc.expectedURL, tc.mock)
+			testHeartrates(t, tc.start_date, tc.end_date, tc.next_token, tc.expectedURL, tc.mock)
 		})
 	}
 }
 
-func testHeartrate(t *testing.T, start_date, end_date, next_token, expectedURL, mock string) {
+func testHeartrates(t *testing.T, start_date, end_date, next_token, expectedURL, mock string) {
 	client, mux, _, teardown := setup()
 	defer teardown()
 
@@ -94,7 +94,7 @@ func testHeartrate(t *testing.T, start_date, end_date, next_token, expectedURL, 
 		fmt.Fprint(w, mock)
 	})
 
-	got, _, err := client.Heartrate(context.Background(), start_date, end_date, next_token)
+	got, _, err := client.Heartrates(context.Background(), start_date, end_date, next_token)
 	assert.NoError(t, err, "should not return an error")
 
 	want := &Heartrate{}

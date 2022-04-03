@@ -26,11 +26,11 @@ type Sessions struct {
 	NextToken string    `json:"next_token"`
 }
 
-// Session gets the session data within a given timeframe.
+// Sessions gets the session data within a given timeframe.
 // If a start and end date are not provided, ie are empty strings, we fall back to Oura's defaults which are:
 // 	start_date: end_date - 1 day
 //	end_date: current UTC date
-func (c *Client) Session(ctx context.Context, start_date, end_date, next_token string) (*Sessions, *http.Response, error) {
+func (c *Client) Sessions(ctx context.Context, start_date, end_date, next_token string) (*Sessions, *http.Response, error) {
 	path := "v2/usercollection/session"
 	params := url.Values{}
 

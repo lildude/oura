@@ -95,15 +95,15 @@ var sessionCases = []struct {
 	},
 }
 
-func TestSession(t *testing.T) {
+func TestSessions(t *testing.T) {
 	for _, tc := range sessionCases {
 		t.Run(tc.name, func(t *testing.T) {
-			testSession(t, tc.start_date, tc.end_date, tc.next_token, tc.expectedURL, tc.mock)
+			testSessions(t, tc.start_date, tc.end_date, tc.next_token, tc.expectedURL, tc.mock)
 		})
 	}
 }
 
-func testSession(t *testing.T, start_date, end_date, next_token, expectedURL, mock string) {
+func testSessions(t *testing.T, start_date, end_date, next_token, expectedURL, mock string) {
 	client, mux, _, teardown := setup()
 	defer teardown()
 
@@ -113,7 +113,7 @@ func testSession(t *testing.T, start_date, end_date, next_token, expectedURL, mo
 		fmt.Fprint(w, mock)
 	})
 
-	got, _, err := client.Session(context.Background(), start_date, end_date, next_token)
+	got, _, err := client.Sessions(context.Background(), start_date, end_date, next_token)
 	assert.NoError(t, err, "should not return an error")
 
 	want := &Sessions{}

@@ -88,15 +88,15 @@ var workoutCases = []struct {
 	},
 }
 
-func TestWorkout(t *testing.T) {
+func TestWorkouts(t *testing.T) {
 	for _, tc := range workoutCases {
 		t.Run(tc.name, func(t *testing.T) {
-			testWorkout(t, tc.start_date, tc.end_date, tc.next_token, tc.expectedURL, tc.mock)
+			testWorkouts(t, tc.start_date, tc.end_date, tc.next_token, tc.expectedURL, tc.mock)
 		})
 	}
 }
 
-func testWorkout(t *testing.T, start_date, end_date, next_token, expectedURL, mock string) {
+func testWorkouts(t *testing.T, start_date, end_date, next_token, expectedURL, mock string) {
 	client, mux, _, teardown := setup()
 	defer teardown()
 
@@ -106,7 +106,7 @@ func testWorkout(t *testing.T, start_date, end_date, next_token, expectedURL, mo
 		fmt.Fprint(w, mock)
 	})
 
-	got, _, err := client.Workout(context.Background(), start_date, end_date, next_token)
+	got, _, err := client.Workouts(context.Background(), start_date, end_date, next_token)
 	assert.NoError(t, err, "should not return an error")
 
 	want := &Sessions{}

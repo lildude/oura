@@ -75,7 +75,7 @@ func Example_dailyActivity() {
 	tc := oauth2.NewClient(ctx, ts)
 
 	cl := oura.NewClient(tc)
-	dailyActivity, httpResp, err := cl.DailyActivity(ctx, "2022-03-20", "2022-03-22", "")
+	dailyActivity, httpResp, err := cl.DailyActivities(ctx, "2022-03-20", "2022-03-22", "")
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println(httpResp)
@@ -92,7 +92,7 @@ func Example_heartrate() {
 	tc := oauth2.NewClient(ctx, ts)
 
 	cl := oura.NewClient(tc)
-	heartrate, httpResp, err := cl.Heartrate(ctx, "2022-03-20T00:00:00+00:00", "2022-03-22T00:00:00+00:00", "")
+	heartrate, httpResp, err := cl.Heartrates(ctx, "2022-03-20T00:00:00+00:00", "2022-03-22T00:00:00+00:00", "")
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println(httpResp)
@@ -126,7 +126,7 @@ func Example_session() {
 	tc := oauth2.NewClient(ctx, ts)
 
 	cl := oura.NewClient(tc)
-	session, httpResp, err := cl.Session(ctx, "2022-03-20", "2022-03-22", "")
+	session, httpResp, err := cl.Sessions(ctx, "2022-03-20", "2022-03-22", "")
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println(httpResp)
@@ -143,7 +143,7 @@ func Example_tag() {
 	tc := oauth2.NewClient(ctx, ts)
 
 	cl := oura.NewClient(tc)
-	tags, httpResp, err := cl.Tag(ctx, "2022-03-20", "2022-03-22", "")
+	tags, httpResp, err := cl.Tags(ctx, "2022-03-20", "2022-03-22", "")
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println(httpResp)
@@ -160,7 +160,7 @@ func Example_workout() {
 	tc := oauth2.NewClient(ctx, ts)
 
 	cl := oura.NewClient(tc)
-	tags, httpResp, err := cl.Workout(ctx, "2022-03-20", "2022-03-22", "")
+	tags, httpResp, err := cl.Workouts(ctx, "2022-03-20", "2022-03-22", "")
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println(httpResp)

@@ -53,11 +53,11 @@ type Contributors struct {
 	TrainingVolume    int `json:"training_volume"`
 }
 
-// DailyActivity gets the daily activity summary values and detailed activity levels for a specified period of time.
+// DailyActivities gets the daily activity summary values and detailed activity levels for a specified period of time.
 // If a start and end date are not provided, ie are empty strings, we fall back to Oura's defaults which are:
 // 	start_date: end_date - 1 day
 //	end_date: current UTC date
-func (c *Client) DailyActivity(ctx context.Context, start_date, end_date, next_token string) (*DailyActivities, *http.Response, error) {
+func (c *Client) DailyActivities(ctx context.Context, start_date, end_date, next_token string) (*DailyActivities, *http.Response, error) {
 	path := "v2/usercollection/daily_activity"
 	params := url.Values{}
 
