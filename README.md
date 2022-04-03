@@ -54,4 +54,3 @@ This library supports both v1 and v2 of the Oura API. Function names are in the 
 ## Releasing
 
 This project uses [GoReleaser](https://goreleaser.com) via GitHub Actions to make the releases quick and easy. When I'm ready for a new release, I push a new tag and the workflow takes care of things.
-
