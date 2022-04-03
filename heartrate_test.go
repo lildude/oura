@@ -50,14 +50,7 @@ var heartrateCases = []struct {
 		end_date:    "",
 		next_token:  "",
 		expectedURL: "/v2/usercollection/heartrate?start_datetime=2020-01-20T00%3A00%3A00%2B00%3A00",
-		mock: `{
-			"data": [
-				{"timestamp": "2020-01-20T12:38:38+00:00"},
-				{"timestamp": "2020-01-21T12:38:43+00:00"},
-				{"timestamp": "2020-01-22T12:38:47+00:00"}
-			],
-			"next_token": "123456"
-		}`,
+		mock:        `{}`, // we don't care about the response
 	},
 	{
 		name:        "get heartrates with start and end dates",
@@ -65,14 +58,15 @@ var heartrateCases = []struct {
 		end_date:    "2020-01-22T00:00:00+00:00",
 		next_token:  "",
 		expectedURL: "/v2/usercollection/heartrate?end_datetime=2020-01-22T00%3A00%3A00%2B00%3A00&start_datetime=2020-01-20T00%3A00%3A00%2B00%3A00",
-		mock: `{
-			"data": [
-				{"timestamp": "2020-01-20T12:38:38+00:00"},
-				{"timestamp": "2020-01-21T12:38:43+00:00"},
-				{"timestamp": "2020-01-22T12:38:47+00:00"}
-			],
-			"next_token": "123456"
-		}`,
+		mock:        `{}`, // we don't care about the response
+	},
+	{
+		name:        "get heartrates with next token",
+		start_date:  "",
+		end_date:    "",
+		next_token:  "thisisbase64encodedjson",
+		expectedURL: "/v2/usercollection/heartrate?next_token=thisisbase64encodedjson",
+		mock:        `{}`, // we don't care about the response
 	},
 }
 

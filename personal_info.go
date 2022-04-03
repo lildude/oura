@@ -20,11 +20,11 @@ func (c *Client) PersonalInfo(ctx context.Context) (*PersonalInfo, *http.Respons
 		return nil, nil, err
 	}
 
-	var personalInfo *PersonalInfo
-	resp, err := c.Do(ctx, req, &personalInfo)
+	var data *PersonalInfo
+	resp, err := c.Do(ctx, req, &data)
 	if err != nil {
-		return personalInfo, resp, err
+		return data, resp, err
 	}
 
-	return personalInfo, resp, nil
+	return data, resp, nil
 }

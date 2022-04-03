@@ -68,15 +68,7 @@ var sessionCases = []struct {
 		end_date:    "",
 		next_token:  "",
 		expectedURL: "/v2/usercollection/session?start_date=2020-01-20",
-		mock: `{
-			"data": [
-				{"day": "2020-01-20"},
-				{"day": "2020-01-21"},
-				{"day": "2020-01-22"},
-				{"day": "2020-01-23"}
-			],
-			"next_token": "12345"
-		}`,
+		mock:        `{}`, // we don't care about the response
 	},
 	{
 		name:        "get sessions with start and end dates",
@@ -84,14 +76,15 @@ var sessionCases = []struct {
 		end_date:    "2020-01-22",
 		next_token:  "",
 		expectedURL: "/v2/usercollection/session?end_date=2020-01-22&start_date=2020-01-20",
-		mock: `{
-			"data": [
-				{"day": "2020-01-20"},
-				{"day": "2020-01-21"},
-				{"day": "2020-01-22"}
-			],
-			"next_token": "12345"
-		}`,
+		mock:        `{}`, // we don't care about the response
+	},
+	{
+		name:        "get sessions with next token",
+		start_date:  "",
+		end_date:    "",
+		next_token:  "thisisbase64encodedjson",
+		expectedURL: "/v2/usercollection/session?next_token=thisisbase64encodedjson",
+		mock:        `{}`, // we don't care about the response
 	},
 }
 

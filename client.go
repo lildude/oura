@@ -39,7 +39,6 @@ type TimeSeriesData struct {
 // provided, http.DefaultClient will be used. To use API methods which require
 // authentication, provide an http.Client that will perform the authentication
 // for you (such as that provided by the golang.org/x/oauth2 library).
-// Inspiration: https://github.com/google/go-github/blob/master/github/github.go
 func NewClient(cc *http.Client) *Client {
 	if cc == nil {
 		cc = http.DefaultClient
@@ -53,7 +52,6 @@ func NewClient(cc *http.Client) *Client {
 // NewRequest creates an HTTP Request. The client baseURL is checked to confirm that it has a trailing
 // slash. A relative URL should be provided without the leading slash. If a non-nil body is provided
 // it will be JSON encoded and included in the request.
-// Inspiration: https://github.com/google/go-github/blob/master/github/github.go
 func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Request, error) {
 	if !strings.HasSuffix(c.baseURL.Path, "/") {
 		return nil, fmt.Errorf("client baseURL does not have a trailing slash: %q", c.baseURL)
@@ -93,7 +91,6 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 // Do sends a request and returns the response. An error is returned if the request cannot
 // be sent or if the API returns an error. If a response is received, the body response body
 // is decoded and stored in the value pointed to by v.
-// Inspiration: https://github.com/google/go-github/blob/master/github/github.go
 func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*http.Response, error) {
 	req = req.WithContext(ctx)
 	resp, err := c.client.Do(req)
@@ -112,9 +109,7 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*htt
 	}
 	resp.Body.Close()
 
-	// Anything other than a HTTP 2xx response code is treated as an error. But the structure of error
-	// responses differs depending on the API being called. Some APIs return validation errors as part
-	// of the standard response. Others respond with a standardised error structure.
+	// Anything other than a HTTP 2xx response code is treated as an error.
 	if c := resp.StatusCode; c >= 300 {
 
 		// Handle auth errors
@@ -162,4 +157,44 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*htt
 	}
 
 	return resp, err
+}
+
+// parametiseDate takes the arguments and URL encodes them into a string
+// where the dates are ISO 8601 date strings without times.
+func parametiseDate(path, start, end, next string) string {
+	params := url.Values{}
+
+	if start != "" {
+		params.Add("start_date", start)
+	}
+	if end != "" {
+		params.Add("end_date", end)
+	}
+	if next != "" {
+		params.Add("next_token", next)
+	}
+	if len(params) > 0 {
+		path += fmt.Sprintf("?%s", params.Encode())
+	}
+	return path
+}
+
+// parametiseDate takes the arguments and URL encodes them into a string
+// where the dates are ISO 8601 date strings with times.
+func parametiseDatetime(path, start, end, next string) string {
+	params := url.Values{}
+
+	if start != "" {
+		params.Add("start_datetime", start)
+	}
+	if end != "" {
+		params.Add("end_datetime", end)
+	}
+	if next != "" {
+		params.Add("next_token", next)
+	}
+	if len(params) > 0 {
+		path += fmt.Sprintf("?%s", params.Encode())
+	}
+	return path
 }

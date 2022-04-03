@@ -2,9 +2,7 @@ package oura
 
 import (
 	"context"
-	"fmt"
 	"net/http"
-	"net/url"
 	"time"
 )
 
@@ -58,32 +56,17 @@ type Contributors struct {
 // 	start_date: end_date - 1 day
 //	end_date: current UTC date
 func (c *Client) DailyActivities(ctx context.Context, start_date, end_date, next_token string) (*DailyActivities, *http.Response, error) {
-	path := "v2/usercollection/daily_activity"
-	params := url.Values{}
-
-	if start_date != "" {
-		params.Add("start_date", start_date)
-	}
-	if end_date != "" {
-		params.Add("end_date", end_date)
-	}
-	if next_token != "" {
-		params.Add("next_token", next_token)
-	}
-	if len(params) > 0 {
-		path += fmt.Sprintf("?%s", params.Encode())
-	}
-
+	path := parametiseDate("v2/usercollection/daily_activity", start_date, end_date, next_token)
 	req, err := c.NewRequest("GET", path, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	var dailyActivities *DailyActivities
-	resp, err := c.Do(ctx, req, &dailyActivities)
+	var data *DailyActivities
+	resp, err := c.Do(ctx, req, &data)
 	if err != nil {
-		return dailyActivities, resp, err
+		return data, resp, err
 	}
 
-	return dailyActivities, resp, nil
+	return data, resp, nil
 }

@@ -76,16 +76,7 @@ var dailyActivityCases = []struct {
 		end_date:    "",
 		next_token:  "",
 		expectedURL: "/v2/usercollection/daily_activity?start_date=2020-01-20",
-		mock: `{
-			"data": [
-				{"timestamp": "2020-01-20T04:00:00+00:00"},
-				{"timestamp": "2020-01-21T04:00:00+00:00"},
-				{"timestamp": "2020-01-22T04:00:00+00:00"},
-				{"timestamp": "2020-01-23T04:00:00+00:00"},
-				{"timestamp": "2020-01-24T04:00:00+00:00"},
-				{"timestamp": "2020-01-25T04:00:00+00:00"},
-				{"timestamp": "2020-01-26T04:00:00+00:00"}
-			]}`,
+		mock:        `{}`, // we don't care about the response here
 	},
 	{
 		name:        "get daily activity with start and end dates",
@@ -93,12 +84,15 @@ var dailyActivityCases = []struct {
 		end_date:    "2020-01-22",
 		next_token:  "",
 		expectedURL: "/v2/usercollection/daily_activity?end_date=2020-01-22&start_date=2020-01-20",
-		mock: `{
-			"data": [
-				{"timestamp": "2020-01-20T04:00:00+00:00"},
-				{"timestamp": "2020-01-21T04:00:00+00:00"},
-				{"timestamp": "2020-01-22T04:00:00+00:00"}
-			]}`,
+		mock:        `{}`, // we don't care about the response here
+	},
+	{
+		name:        "get daily activity with next token",
+		start_date:  "",
+		end_date:    "",
+		next_token:  "thisisbase64encodedjson",
+		expectedURL: "/v2/usercollection/daily_activity?next_token=thisisbase64encodedjson",
+		mock:        `{}`, // We don't care about the response here
 	},
 }
 

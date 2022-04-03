@@ -2,9 +2,7 @@ package oura
 
 import (
 	"context"
-	"fmt"
 	"net/http"
-	"net/url"
 	"time"
 )
 
@@ -26,32 +24,17 @@ type Heartrates struct {
 // 	start_datetime: end_datetime - 1 day
 //	end_datetime: current UTC date
 func (c *Client) Heartrates(ctx context.Context, start_datetime, end_datetime, next_token string) (*Heartrates, *http.Response, error) {
-	path := "v2/usercollection/heartrate"
-	params := url.Values{}
-
-	if start_datetime != "" {
-		params.Add("start_datetime", start_datetime)
-	}
-	if end_datetime != "" {
-		params.Add("end_datetime", end_datetime)
-	}
-	if next_token != "" {
-		params.Add("next_token", next_token)
-	}
-	if len(params) > 0 {
-		path += fmt.Sprintf("?%s", params.Encode())
-	}
-
+	path := parametiseDatetime("v2/usercollection/heartrate", start_datetime, end_datetime, next_token)
 	req, err := c.NewRequest("GET", path, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	var heartrates *Heartrates
-	resp, err := c.Do(ctx, req, &heartrates)
+	var data *Heartrates
+	resp, err := c.Do(ctx, req, &data)
 	if err != nil {
-		return heartrates, resp, err
+		return data, resp, err
 	}
 
-	return heartrates, resp, nil
+	return data, resp, nil
 }
