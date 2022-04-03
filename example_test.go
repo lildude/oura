@@ -118,3 +118,20 @@ func Example_personalInfo() {
 	}
 	// Output
 }
+
+func Example_session() {
+	godotenv.Load(".env")
+	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
+	ctx := context.Background()
+	tc := oauth2.NewClient(ctx, ts)
+
+	cl := oura.NewClient(tc)
+	session, httpResp, err := cl.Session(ctx, "2022-03-20", "2022-03-22", "")
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println(httpResp)
+	} else {
+		fmt.Println(session)
+	}
+	// Output
+}
