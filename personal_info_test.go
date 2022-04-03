@@ -1,0 +1,67 @@
+package oura
+
+import (
+	"context"
+	"fmt"
+	"net/http"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+)
+
+var personalInfoTestCases = []struct {
+	name     string
+	mock     string
+	expected PersonalInfo
+}{
+	{
+		name: "Regular info",
+		mock: `{
+			"age": 27,
+			"weight": 80,
+			"height": 180,
+			"biological_sex": "male",
+			"email": "john.doe@the.domain"
+		}`,
+		expected: PersonalInfo{
+			Age:           27,
+			Weight:        80.0,
+			Height:        180,
+			BiologicalSex: "male",
+			Email:         "john.doe@the.domain",
+		},
+	},
+	{
+		name: "Info w/ weight & height as float",
+		mock: `{
+			"age": 27,
+			"weight": 80.0,
+			"height": 180.0,
+			"biological_sex": "male",
+			"email": "john.doe@the.domain"
+		}`,
+		expected: PersonalInfo{
+			Age:           27,
+			Weight:        80.0,
+			Height:        180.0,
+			BiologicalSex: "male",
+			Email:         "john.doe@the.domain",
+		},
+	},
+}
+
+func TestPersonalInfo(t *testing.T) {
+	for _, tc := range personalInfoTestCases {
+		client, mux, _, teardown := setup()
+		defer teardown()
+
+		mux.HandleFunc("/v2/usercollection/personal_info", func(w http.ResponseWriter, r *http.Request) {
+			assert.Equal(t, http.MethodGet, r.Method)
+			fmt.Fprint(w, tc.mock)
+		})
+
+		got, _, err := client.PersonalInfo(context.Background())
+		assert.NoError(t, err, tc.name+" should not return an error")
+		assert.ObjectsAreEqual(tc.expected, got)
+	}
+}

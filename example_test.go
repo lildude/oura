@@ -92,12 +92,29 @@ func Example_heartrate() {
 	tc := oauth2.NewClient(ctx, ts)
 
 	cl := oura.NewClient(tc)
-	dailyActivity, httpResp, err := cl.Heartrate(ctx, "2022-03-20T00:00:00+00:00", "2022-03-22T00:00:00+00:00", "")
+	heartrate, httpResp, err := cl.Heartrate(ctx, "2022-03-20T00:00:00+00:00", "2022-03-22T00:00:00+00:00", "")
 	if err != nil {
 		fmt.Println(err)
 		fmt.Println(httpResp)
 	} else {
-		fmt.Println(dailyActivity)
+		fmt.Println(heartrate)
+	}
+	// Output
+}
+
+func Example_personalInfo() {
+	godotenv.Load(".env")
+	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
+	ctx := context.Background()
+	tc := oauth2.NewClient(ctx, ts)
+
+	cl := oura.NewClient(tc)
+	personalInfo, httpResp, err := cl.PersonalInfo(ctx)
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println(httpResp)
+	} else {
+		fmt.Println(personalInfo)
 	}
 	// Output
 }
