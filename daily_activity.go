@@ -52,13 +52,6 @@ type Contributors struct {
 	TrainingVolume    int `json:"training_volume"`
 }
 
-// MET (Metabolic equivalent) timeseries data
-type Met struct {
-	Interval  float32   `json:"interval"`
-	Items     []float32 `json:"items"`
-	Timestamp time.Time `json:"timestamp"`
-}
-
 // DailyActivity gets the daily activity summary values and detailed activity levels for a specified period of time.
 // If a start and end date are not provided, ie are empty strings, we fall back to Oura's defaults which are:
 // 	start_date: end_date - 1 day

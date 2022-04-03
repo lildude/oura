@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/pkg/errors"
 )
@@ -25,6 +26,13 @@ type Client struct {
 
 	UserAgent string
 	client    *http.Client
+}
+
+// TimeSeriesData is time series data used by various other methods.
+type TimeSeriesData struct {
+	Interval  float32   `json:"interval"`
+	Items     []float32 `json:"items"`
+	Timestamp time.Time `json:"timestamp"`
 }
 
 // NewClient returns a new Oura API client. If a nil httpClient is
