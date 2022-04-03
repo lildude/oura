@@ -98,7 +98,7 @@ func testHeartrate(t *testing.T, start_date, end_date, next_token, expectedURL, 
 	assert.NoError(t, err, "should not return an error")
 
 	want := &Heartrate{}
-	json.Unmarshal([]byte(mock), want)
+	json.Unmarshal([]byte(mock), want) //nolint:errcheck
 
 	assert.ObjectsAreEqual(want, got)
 }

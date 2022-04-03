@@ -84,7 +84,7 @@ func TestDo(t *testing.T) {
 		got := new(foo)
 
 		req, _ := client.NewRequest("GET", ".", nil)
-		client.Do(context.Background(), req, got)
+		client.Do(context.Background(), req, got) //nolint:errcheck
 
 		assert.ObjectsAreEqual(want, got)
 	})

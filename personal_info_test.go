@@ -2,6 +2,7 @@ package oura
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"testing"
@@ -23,13 +24,6 @@ var personalInfoTestCases = []struct {
 			"biological_sex": "male",
 			"email": "john.doe@the.domain"
 		}`,
-		expected: PersonalInfo{
-			Age:           27,
-			Weight:        80.0,
-			Height:        180,
-			BiologicalSex: "male",
-			Email:         "john.doe@the.domain",
-		},
 	},
 	{
 		name: "Info w/ weight & height as float",
@@ -40,13 +34,6 @@ var personalInfoTestCases = []struct {
 			"biological_sex": "male",
 			"email": "john.doe@the.domain"
 		}`,
-		expected: PersonalInfo{
-			Age:           27,
-			Weight:        80.0,
-			Height:        180.0,
-			BiologicalSex: "male",
-			Email:         "john.doe@the.domain",
-		},
 	},
 }
 
@@ -62,6 +49,10 @@ func TestPersonalInfo(t *testing.T) {
 
 		got, _, err := client.PersonalInfo(context.Background())
 		assert.NoError(t, err, tc.name+" should not return an error")
+
+		want := &PersonalInfo{}
+		json.Unmarshal([]byte(tc.mock), want) //nolint:errcheck
+
 		assert.ObjectsAreEqual(tc.expected, got)
 	}
 }

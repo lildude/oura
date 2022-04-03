@@ -15,7 +15,7 @@ import (
 // for further details.
 
 func Example_getUserInfo() {
-	godotenv.Load(".env")
+	godotenv.Load(".env") //nolint:errcheck
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
 	ctx := context.Background()
 	tc := oauth2.NewClient(ctx, ts)
@@ -33,7 +33,7 @@ func Example_getUserInfo() {
 }
 
 func Example_getSleep() {
-	godotenv.Load(".env")
+	godotenv.Load(".env") //nolint:errcheck
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
 	ctx := context.Background()
 	tc := oauth2.NewClient(ctx, ts)
@@ -51,7 +51,7 @@ func Example_getSleep() {
 }
 
 func Example_getActivities() {
-	godotenv.Load(".env")
+	godotenv.Load(".env") //nolint:errcheck
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
 	ctx := context.Background()
 	tc := oauth2.NewClient(ctx, ts)
@@ -69,7 +69,7 @@ func Example_getActivities() {
 }
 
 func Example_dailyActivity() {
-	godotenv.Load(".env")
+	godotenv.Load(".env") //nolint:errcheck
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
 	ctx := context.Background()
 	tc := oauth2.NewClient(ctx, ts)
@@ -86,7 +86,7 @@ func Example_dailyActivity() {
 }
 
 func Example_heartrate() {
-	godotenv.Load(".env")
+	godotenv.Load(".env") //nolint:errcheck
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
 	ctx := context.Background()
 	tc := oauth2.NewClient(ctx, ts)
@@ -103,7 +103,7 @@ func Example_heartrate() {
 }
 
 func Example_personalInfo() {
-	godotenv.Load(".env")
+	godotenv.Load(".env") //nolint:errcheck
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
 	ctx := context.Background()
 	tc := oauth2.NewClient(ctx, ts)
@@ -120,7 +120,7 @@ func Example_personalInfo() {
 }
 
 func Example_session() {
-	godotenv.Load(".env")
+	godotenv.Load(".env") //nolint:errcheck
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
 	ctx := context.Background()
 	tc := oauth2.NewClient(ctx, ts)
@@ -137,7 +137,7 @@ func Example_session() {
 }
 
 func Example_tag() {
-	godotenv.Load(".env")
+	godotenv.Load(".env") //nolint:errcheck
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
 	ctx := context.Background()
 	tc := oauth2.NewClient(ctx, ts)
@@ -154,7 +154,7 @@ func Example_tag() {
 }
 
 func Example_workout() {
-	godotenv.Load(".env")
+	godotenv.Load(".env") //nolint:errcheck
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
 	ctx := context.Background()
 	tc := oauth2.NewClient(ctx, ts)

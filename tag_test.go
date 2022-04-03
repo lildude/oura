@@ -95,7 +95,7 @@ func testTag(t *testing.T, start_date, end_date, next_token, expectedURL, mock s
 	assert.NoError(t, err, "should not return an error")
 
 	want := &Sessions{}
-	json.Unmarshal([]byte(mock), want)
+	json.Unmarshal([]byte(mock), want) //nolint:errcheck
 
 	assert.ObjectsAreEqual(want, got)
 }

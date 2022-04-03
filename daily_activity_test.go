@@ -124,7 +124,7 @@ func testDailyActivity(t *testing.T, start_date, end_date, next_token, expectedU
 	assert.NoError(t, err, "should not return an error")
 
 	want := &DailyActivities{}
-	json.Unmarshal([]byte(mock), want)
+	json.Unmarshal([]byte(mock), want) //nolint:errcheck
 
 	assert.ObjectsAreEqual(want, got)
 }
