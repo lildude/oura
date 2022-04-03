@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+// PersonalInfo represents the personal information of the user returned from the Oura API.
 type PersonalInfo struct {
 	Age           int     `json:"age"`
 	Weight        float32 `json:"weight"`

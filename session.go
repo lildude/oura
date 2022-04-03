@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// Session represents the data returned from the Oura API for a single session.
 type Session struct {
 	Day                  string         `json:"day"`
 	StartDatetime        time.Time      `json:"start_date"`
@@ -19,17 +20,16 @@ type Session struct {
 	MotionCount          TimeSeriesData `json:"motion_count"`
 }
 
+// Sessions represents the data returned from the Oura API for a list of sessions.
 type Sessions struct {
 	Data      []Session `json:"data"`
 	NextToken string    `json:"next_token"`
 }
 
-type TimeSeriesData struct {
-	Interval  float32   `json:"interval"`
-	Items     []float32 `json:"items"`
-	Timestamp time.Time `json:"timestamp"`
-}
-
+// Session gets the session data within a given timeframe.
+// If a start and end date are not provided, ie are empty strings, we fall back to Oura's defaults which are:
+// 	start_date: end_date - 1 day
+//	end_date: current UTC date
 func (c *Client) Session(ctx context.Context, start_date, end_date, next_token string) (*Sessions, *http.Response, error) {
 	path := "v2/usercollection/session"
 	params := url.Values{}

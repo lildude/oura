@@ -8,35 +8,36 @@ import (
 	"time"
 )
 
-// DailyActivity represents the daily activity data for a given date range
+// DailyActivity represents the data returned from the Oura API for a single activity.
 type DailyActivity struct {
-	Class5min                 string       `json:"class_5_min"`
-	Score                     int          `json:"score"`
-	ActiveCalories            int          `json:"active_calories"`
-	AverageMetMinutes         float32      `json:"average_met_minutes"`
-	Contributors              Contributors `json:"contributors"`
-	EquivalentWalkingDistance int          `json:"equivalent_walking_distance"`
-	HighActivityMetMinutes    int          `json:"high_activity_met_minutes"`
-	HighActivityTime          int          `json:"high_activity_time"`
-	InactivityAlerts          int          `json:"inactivity_alerts"`
-	LowActivityMetMinutes     int          `json:"low_activity_met_minutes"`
-	LowActivityTime           int          `json:"low_activity_time"`
-	MediumActivityMetMinutes  int          `json:"medium_activity_met_minutes"`
-	MediumActivityTime        int          `json:"medium_activity_time"`
-	Met                       Met          `json:"met"`
-	MetersToTarget            int          `json:"meters_to_target"`
-	NonWearTime               int          `json:"non_wear_time"`
-	RestingTime               int          `json:"resting_time"`
-	SedentaryMetMinutes       int          `json:"sedentary_met_minutes"`
-	SedentaryTime             int          `json:"sedentary_time"`
-	Steps                     int          `json:"steps"`
-	TargetCalories            int          `json:"target_calories"`
-	TargetMeters              int          `json:"target_meters"`
-	TotalCalories             int          `json:"total_calories"`
-	Day                       string       `json:"day"`
-	Timestamp                 time.Time    `json:"timestamp"`
+	Class5min                 string         `json:"class_5_min"`
+	Score                     int            `json:"score"`
+	ActiveCalories            int            `json:"active_calories"`
+	AverageMetMinutes         float32        `json:"average_met_minutes"`
+	Contributors              Contributors   `json:"contributors"`
+	EquivalentWalkingDistance int            `json:"equivalent_walking_distance"`
+	HighActivityMetMinutes    int            `json:"high_activity_met_minutes"`
+	HighActivityTime          int            `json:"high_activity_time"`
+	InactivityAlerts          int            `json:"inactivity_alerts"`
+	LowActivityMetMinutes     int            `json:"low_activity_met_minutes"`
+	LowActivityTime           int            `json:"low_activity_time"`
+	MediumActivityMetMinutes  int            `json:"medium_activity_met_minutes"`
+	MediumActivityTime        int            `json:"medium_activity_time"`
+	Met                       TimeSeriesData `json:"met"`
+	MetersToTarget            int            `json:"meters_to_target"`
+	NonWearTime               int            `json:"non_wear_time"`
+	RestingTime               int            `json:"resting_time"`
+	SedentaryMetMinutes       int            `json:"sedentary_met_minutes"`
+	SedentaryTime             int            `json:"sedentary_time"`
+	Steps                     int            `json:"steps"`
+	TargetCalories            int            `json:"target_calories"`
+	TargetMeters              int            `json:"target_meters"`
+	TotalCalories             int            `json:"total_calories"`
+	Day                       string         `json:"day"`
+	Timestamp                 time.Time      `json:"timestamp"`
 }
 
+// DailyActivities represents the data returned from the Oura API for a list of daily activity summaries.
 type DailyActivities struct {
 	Data      []DailyActivity `json:"data"`
 	NextToken string          `json:"next_token"`
