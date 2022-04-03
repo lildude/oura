@@ -41,13 +41,15 @@ func main() {
 
   cl := oura.NewClient(tc)
 
-  userInfo, _, err := cl.GetUserInfo(ctx)
+  info, _, err := cl.PersonalInfo(ctx)
   if err != nil {
     fmt.Println(err)
   }
-  fmt.Println(userInfo.Age, userInfo.Gender, userInfo.Weight, userInfo.Email)
+  fmt.Println(info.Age, info.Gender, info.Weight, info.Email)
 }
 ```
+
+This library supports both v1 and v2 of the Oura API. Function names are in the plural form, where appropriate, with the v1 API calls prefixed with `Get`. For example, `GetActivities` queries the v1 API, and `DailyActivities` queries the v2 API. `GetUserInfo` queries the v1 API and `PersonalInfo` queries the v2 API.
 
 ## Releasing
 
