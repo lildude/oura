@@ -59,7 +59,7 @@ type Activities struct {
 // 	"If you omit the start date, it will be set to one week ago.
 //	 If you omit the end date, it will be set to the current day."
 func (c *Client) GetActivities(ctx context.Context, start string, end string) (*Activities, *http.Response, error) {
-	path := "activity"
+	path := "v1/activity"
 	params := url.Values{}
 
 	if start != "" {

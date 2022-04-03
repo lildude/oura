@@ -55,7 +55,7 @@ func TestUserInfo(t *testing.T) {
 		client, mux, _, teardown := setup()
 		defer teardown()
 
-		mux.HandleFunc("/userinfo", func(w http.ResponseWriter, r *http.Request) {
+		mux.HandleFunc("/v1/userinfo", func(w http.ResponseWriter, r *http.Request) {
 			assert.Equal(t, http.MethodGet, r.Method)
 			fmt.Fprint(w, tc.mock)
 		})

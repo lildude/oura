@@ -21,7 +21,7 @@ var sleepTestCases = []struct {
 		name:        "get sleep without specific dates",
 		start:       "",
 		end:         "",
-		expectedURL: "/sleep",
+		expectedURL: "/v1/sleep",
 		mock: `{
 			"sleep": [{
 				"summary_date": "2017-11-05",
@@ -63,7 +63,7 @@ var sleepTestCases = []struct {
 		name:        "get sleep with only start date",
 		start:       "2020-01-20",
 		end:         "",
-		expectedURL: "/sleep?start=2020-01-20",
+		expectedURL: "/v1/sleep?start=2020-01-20",
 		mock: `{
 			"sleep": [
 				{
@@ -89,7 +89,7 @@ var sleepTestCases = []struct {
 		name:        "get sleep with start and end dates",
 		start:       "2020-01-20",
 		end:         "2020-01-22",
-		expectedURL: "/sleep?end=2020-01-22&start=2020-01-20",
+		expectedURL: "/v1/sleep?end=2020-01-22&start=2020-01-20",
 		mock: `{
 			"sleep": [
 				{
@@ -121,7 +121,7 @@ func testGetSleep(t *testing.T, start, end, expectedURL, mock string) {
 	client, mux, _, teardown := setup()
 	defer teardown()
 
-	mux.HandleFunc("/sleep", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v1/sleep", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method)
 		assert.Equal(t, expectedURL, r.URL.String())
 		fmt.Fprint(w, mock)

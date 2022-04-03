@@ -27,7 +27,7 @@ type IdealBedtimes struct {
 // 	"If you omit the start date, it will be set to one week ago.
 //	 If you omit the end date, it will be set to the current day."
 func (c *Client) GetBedtime(ctx context.Context, start string, end string) (*IdealBedtimes, *http.Response, error) {
-	path := "bedtime"
+	path := "v1/bedtime"
 	params := url.Values{}
 
 	if start != "" {

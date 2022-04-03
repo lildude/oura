@@ -59,7 +59,7 @@ type Sleeps struct {
 // 	"If you omit the start date, it will be set to one week ago.
 //	 If you omit the end date, it will be set to the current day."
 func (c *Client) GetSleep(ctx context.Context, start string, end string) (*Sleeps, *http.Response, error) {
-	path := "sleep"
+	path := "v1/sleep"
 	params := url.Values{}
 
 	if start != "" {
