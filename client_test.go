@@ -17,7 +17,7 @@ import (
 func TestNewClient(t *testing.T) {
 	c := NewClient(nil)
 
-	assert.Equal(t, BaseURLV1, c.baseURL.String(), "should configure the client to use the default url")
+	assert.Equal(t, BaseURL, c.baseURL.String(), "should configure the client to use the default url")
 	assert.Equal(t, "go-oura", c.UserAgent, "should configure the client to use the default user-agent")
 }
 
@@ -28,8 +28,7 @@ func TestNewRequest(t *testing.T) {
 	c := NewClient(nil)
 
 	t.Run("valid request", func(tc *testing.T) {
-
-		inURL, outURL := "foo", BaseURLV1+"foo"
+		inURL, outURL := "foo", BaseURL+"foo"
 		inBody, outBody := &UserInfo{Age: 99, Weight: 102, Gender: "ano", Email: "user@example.com", Height: 184}, `{"age":99,"email":"user@example.com","gender":"ano","height":184,"weight":102}`+"\n"
 
 		req, err := c.NewRequest("GET", inURL, inBody)
@@ -64,7 +63,6 @@ func TestNewRequest(t *testing.T) {
 		assert.Nil(tc, err, "should not return an error")
 		assert.Nil(tc, req.Body, "should return an empty body")
 	})
-
 }
 
 // TestDo confirms that Do returns a JSON decoded value when making a request. It
@@ -198,9 +196,7 @@ func TestDo(t *testing.T) {
 		if err, ok := err.(Error); ok == true && err.Temporary() == true {
 			t.Errorf("should not return a temporary error")
 		}
-
 	})
-
 }
 
 // Setup establishes a test Server that can be used to provide mock responses during testing.

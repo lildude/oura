@@ -15,8 +15,7 @@ import (
 )
 
 var (
-	// BaseURLV1 is Oura's v1 API endpoint
-	BaseURLV1 = "https://api.ouraring.com/v1/"
+	BaseURL   = "https://api.ouraring.com/"
 	userAgent = "go-oura"
 )
 
@@ -37,7 +36,7 @@ func NewClient(cc *http.Client) *Client {
 	if cc == nil {
 		cc = http.DefaultClient
 	}
-	baseURL, _ := url.Parse(BaseURLV1)
+	baseURL, _ := url.Parse(BaseURL)
 
 	c := &Client{baseURL: baseURL, UserAgent: userAgent, client: cc}
 	return c
@@ -90,7 +89,6 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*http.Response, error) {
 	req = req.WithContext(ctx)
 	resp, err := c.client.Do(req)
-
 	if err != nil {
 		select {
 		case <-ctx.Done():
@@ -119,7 +117,7 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*htt
 
 		// Try parsing the response using the standard error schema. If this fails we wrap the parsing
 		// error and return. Otherwise return the errors included in the API response payload.
-		var e = Errors{}
+		e := Errors{}
 		err := json.Unmarshal(data, &e)
 		if err != nil {
 			err = errors.Wrap(err, http.StatusText(resp.StatusCode))
