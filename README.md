@@ -2,7 +2,7 @@
 
 ![Tests Status Badge](https://github.com/lildude/oura/workflows/Tests/badge.svg)
 
-An unofficial Go client for the [Oura Cloud API](https://cloud.ouraring.com/docs/).
+An unofficial Go client for the [Oura Cloud API v1](https://cloud.ouraring.com/docs/) and [Oura Cloud API v2](https://cloud.ouraring.com/v2/docs/).
 
 ## Installation
 
@@ -16,7 +16,7 @@ go get -u 'github.com/lildude/oura'
 
 Depending on your requirements, you will need an access token to query the API. This can be a personal access token or a full OAuth2 authenticated access token.
 
-See the section on Authentication in the [Oura Cloud API Docs](https://cloud.ouraring.com/docs) for more information the authentication methods.
+See the section on Authentication in the [Oura Cloud API Docs](https://cloud.ouraring.com/v2/docs) for more information the authentication methods.
 
 The simplest approach for accessing your own data is to use a personal access token like this:
 
