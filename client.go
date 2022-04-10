@@ -35,6 +35,17 @@ type TimeSeriesData struct {
 	Timestamp time.Time `json:"timestamp"`
 }
 
+func (e *ErrorDetail) Error() string {
+	return e.Detail
+}
+
+// ErrorDetail holds the details of an error message
+type ErrorDetail struct {
+	Status int    `json:"status,omitempty"`
+	Title  string `json:"title,omitempty"`
+	Detail string `json:"detail"`
+}
+
 // NewClient returns a new Oura API client. If a nil httpClient is
 // provided, http.DefaultClient will be used. To use API methods which require
 // authentication, provide an http.Client that will perform the authentication
@@ -95,53 +106,25 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*htt
 	req = req.WithContext(ctx)
 	resp, err := c.client.Do(req)
 	if err != nil {
-		select {
-		case <-ctx.Done():
-			return nil, errors.Wrap(err, ctx.Err().Error())
-		default:
-			return nil, err
-		}
+		return nil, err
 	}
 
 	data, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, errors.Wrap(err, "unable to read body")
+		return nil, err
 	}
 	resp.Body.Close()
 
 	// Anything other than a HTTP 2xx response code is treated as an error.
-	if c := resp.StatusCode; c >= 300 {
-
-		// Handle auth errors
-		if resp.StatusCode == http.StatusUnauthorized || resp.StatusCode == http.StatusForbidden {
-			err := AuthError(http.StatusText(resp.StatusCode))
+	if resp.StatusCode >= 300 {
+		e := ErrorDetail{}
+		err := json.Unmarshal(data, &e)
+		if err != nil {
 			return resp, err
 		}
 
-		// Try parsing the response using the standard error schema. If this fails we wrap the parsing
-		// error and return. Otherwise return the errors included in the API response payload.
-		e := Errors{}
-		err := json.Unmarshal(data, &e)
-		if err != nil {
-			err = errors.Wrap(err, http.StatusText(resp.StatusCode))
-			return resp, errors.Wrap(err, "unable to parse API error response")
-		}
-
-		if len(e) != 0 {
-			return resp, errors.Wrap(e, http.StatusText(resp.StatusCode))
-		}
-
-		// In some cases, the error response is returned as part of the
-		// requested resource. In these cases we attempt to decode the
-		// resource and return the error.
-		err = json.Unmarshal(data, v)
-		if err != nil {
-			err = errors.Wrap(err, http.StatusText(resp.StatusCode))
-			return resp, errors.Wrap(err, "unable to parse API response")
-		}
-
-		err = errors.New("no additional error information available")
-		return resp, errors.Wrap(err, http.StatusText(resp.StatusCode))
+		err = errors.New(http.StatusText(resp.StatusCode) + ": " + e.Detail)
+		return resp, err
 	}
 
 	if v != nil && len(data) != 0 {
@@ -152,7 +135,6 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*htt
 		case io.EOF:
 			err = nil
 		default:
-			err = errors.Wrap(err, "unable to parse API response")
 		}
 	}
 
