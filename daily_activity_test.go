@@ -94,6 +94,16 @@ var dailyActivityCases = []struct {
 		expectedURL: "/v2/usercollection/daily_activity?next_token=thisisbase64encodedjson",
 		mock:        `{}`, // We don't care about the response here
 	},
+	{
+		name:        "get error with dates the wrong way round",
+		start_date:  "2020-01-25",
+		end_date:    "2020-01-22",
+		next_token:  "",
+		expectedURL: "/v2/usercollection/daily_activity?end_date=2020-01-22&start_date=2020-01-25",
+		mock: `{
+			"detail": "Start date is greater than end date: [start_date: 2020-01-25; end_date: 2020-01-22]"
+		}`,
+	},
 }
 
 func TestDailyActivities(t *testing.T) {

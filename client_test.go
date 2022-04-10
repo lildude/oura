@@ -158,7 +158,7 @@ func TestDo(t *testing.T) {
 		assert.Error(tc, err, "should return an error")
 	})
 
-	t.Run("request on a cancelled context", func(tc *testing.T) {
+	t.Run("GET request on a cancelled context", func(tc *testing.T) {
 		client, mux, _, teardown := setup()
 		defer teardown()
 
@@ -190,12 +190,27 @@ func TestDo(t *testing.T) {
 
 		assert.Equal(tc, http.StatusForbidden, resp.StatusCode)
 		assert.Error(tc, err, "should return an error")
-		if _, ok := err.(AuthError); ok == false {
-			t.Errorf("should return a starling.AuthError: %T", err)
-		}
-		if err, ok := err.(Error); ok == true && err.Temporary() == true {
-			t.Errorf("should not return a temporary error")
-		}
+	})
+
+	t.Run("GET request that returns an error response", func(tc *testing.T) {
+		client, mux, _, teardown := setup()
+		defer teardown()
+
+		mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+			assert.Equal(tc, http.MethodGet, r.Method)
+			w.WriteHeader(http.StatusBadRequest)
+			resp := `{
+				"detail": "Start date is greater than end date: [start_date: 2020-01-25; end_date: 2020-01-22]"
+			}`
+			fmt.Fprintln(w, resp)
+		})
+
+		req, _ := client.NewRequest("GET", ".", nil)
+		resp, err := client.Do(context.Background(), req, nil)
+
+		assert.Equal(tc, http.StatusBadRequest, resp.StatusCode)
+		assert.Error(tc, err, "should return an error")
+		assert.EqualError(tc, err, "Bad Request: Start date is greater than end date: [start_date: 2020-01-25; end_date: 2020-01-22]")
 	})
 }
 
