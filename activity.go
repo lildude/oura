@@ -78,7 +78,7 @@ func (c *Client) GetActivities(ctx context.Context, start string, end string) (*
 	}
 
 	var activities *Activities
-	resp, err := c.Do(ctx, req, &activities)
+	resp, err := c.do(ctx, req, &activities)
 	if err != nil {
 		return activities, resp, err
 	}

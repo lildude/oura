@@ -31,7 +31,7 @@ func (c *Client) Heartrates(ctx context.Context, start_datetime, end_datetime, n
 	}
 
 	var data *Heartrates
-	resp, err := c.Do(ctx, req, &data)
+	resp, err := c.do(ctx, req, &data)
 	if err != nil {
 		return data, resp, err
 	}

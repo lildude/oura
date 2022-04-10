@@ -22,7 +22,7 @@ func (c *Client) GetUserInfo(ctx context.Context) (*UserInfo, *http.Response, er
 	}
 
 	var userInfo *UserInfo
-	resp, err := c.Do(ctx, req, &userInfo)
+	resp, err := c.do(ctx, req, &userInfo)
 	if err != nil {
 		return userInfo, resp, err
 	}

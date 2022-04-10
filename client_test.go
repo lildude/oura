@@ -84,7 +84,7 @@ func TestDo(t *testing.T) {
 		got := new(foo)
 
 		req, _ := client.NewRequest("GET", ".", nil)
-		client.Do(context.Background(), req, got) //nolint:errcheck
+		client.do(context.Background(), req, got) //nolint:errcheck
 
 		assert.ObjectsAreEqual(want, got)
 	})
@@ -99,7 +99,7 @@ func TestDo(t *testing.T) {
 		})
 
 		req, _ := client.NewRequest("GET", ".", nil)
-		resp, err := client.Do(context.Background(), req, nil)
+		resp, err := client.do(context.Background(), req, nil)
 
 		assert.Equal(tc, http.StatusInternalServerError, resp.StatusCode)
 		assert.Error(tc, err, "should return an error")
@@ -118,7 +118,7 @@ func TestDo(t *testing.T) {
 
 		req, _ := client.NewRequest("GET", ".", nil)
 		got := new(foo)
-		resp, err := client.Do(context.Background(), req, got)
+		resp, err := client.do(context.Background(), req, got)
 
 		assert.Equal(tc, http.StatusOK, resp.StatusCode)
 		assert.Nil(tc, err, "should not return an error")
@@ -152,7 +152,7 @@ func TestDo(t *testing.T) {
 
 		req, _ := client.NewRequest("GET", ".", nil)
 		got := new(foo)
-		resp, err := client.Do(context.Background(), req, got)
+		resp, err := client.do(context.Background(), req, got)
 
 		assert.Equal(tc, http.StatusOK, resp.StatusCode)
 		assert.Error(tc, err, "should return an error")
@@ -170,7 +170,7 @@ func TestDo(t *testing.T) {
 		req, _ := client.NewRequest("GET", ".", nil)
 		ctx, cancel := context.WithCancel(context.Background())
 		cancel()
-		resp, err := client.Do(ctx, req, nil)
+		resp, err := client.do(ctx, req, nil)
 
 		assert.Error(tc, err, "should return an error")
 		assert.Nil(tc, resp, "should not return a response")
@@ -186,7 +186,7 @@ func TestDo(t *testing.T) {
 		})
 
 		req, _ := client.NewRequest("GET", ".", nil)
-		resp, err := client.Do(context.Background(), req, nil)
+		resp, err := client.do(context.Background(), req, nil)
 
 		assert.Equal(tc, http.StatusForbidden, resp.StatusCode)
 		assert.Error(tc, err, "should return an error")
@@ -206,7 +206,7 @@ func TestDo(t *testing.T) {
 		})
 
 		req, _ := client.NewRequest("GET", ".", nil)
-		resp, err := client.Do(context.Background(), req, nil)
+		resp, err := client.do(context.Background(), req, nil)
 
 		assert.Equal(tc, http.StatusBadRequest, resp.StatusCode)
 		assert.Error(tc, err, "should return an error")

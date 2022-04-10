@@ -21,7 +21,7 @@ func (c *Client) PersonalInfo(ctx context.Context) (*PersonalInfo, *http.Respons
 	}
 
 	var data *PersonalInfo
-	resp, err := c.Do(ctx, req, &data)
+	resp, err := c.do(ctx, req, &data)
 	if err != nil {
 		return data, resp, err
 	}

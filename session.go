@@ -12,10 +12,10 @@ type Session struct {
 	StartDatetime        time.Time      `json:"start_date"`
 	EndDatetime          time.Time      `json:"end_date"`
 	Type                 string         `json:"type"`
-	Heartrate            TimeSeriesData `json:"heart_rate"`
-	HeartrateVariability TimeSeriesData `json:"heart_rate_variability"`
+	Heartrate            timeSeriesData `json:"heart_rate"`
+	HeartrateVariability timeSeriesData `json:"heart_rate_variability"`
 	Mood                 string         `json:"mood"`
-	MotionCount          TimeSeriesData `json:"motion_count"`
+	MotionCount          timeSeriesData `json:"motion_count"`
 }
 
 // Sessions represents the data returned from the Oura API for a list of sessions.
@@ -36,7 +36,7 @@ func (c *Client) Sessions(ctx context.Context, start_date, end_date, next_token 
 	}
 
 	var data *Sessions
-	resp, err := c.Do(ctx, req, &data)
+	resp, err := c.do(ctx, req, &data)
 	if err != nil {
 		return data, resp, err
 	}

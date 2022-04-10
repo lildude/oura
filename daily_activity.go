@@ -21,7 +21,7 @@ type DailyActivity struct {
 	LowActivityTime           int            `json:"low_activity_time"`
 	MediumActivityMetMinutes  int            `json:"medium_activity_met_minutes"`
 	MediumActivityTime        int            `json:"medium_activity_time"`
-	Met                       TimeSeriesData `json:"met"`
+	Met                       timeSeriesData `json:"met"`
 	MetersToTarget            int            `json:"meters_to_target"`
 	NonWearTime               int            `json:"non_wear_time"`
 	RestingTime               int            `json:"resting_time"`
@@ -63,7 +63,7 @@ func (c *Client) DailyActivities(ctx context.Context, start_date, end_date, next
 	}
 
 	var data *DailyActivities
-	resp, err := c.Do(ctx, req, &data)
+	resp, err := c.do(ctx, req, &data)
 	if err != nil {
 		return data, resp, err
 	}

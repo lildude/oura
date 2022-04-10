@@ -37,7 +37,7 @@ func (c *Client) Workouts(ctx context.Context, start_date, end_date, next_token 
 	}
 
 	var data *Workouts
-	resp, err := c.Do(ctx, req, &data)
+	resp, err := c.do(ctx, req, &data)
 	if err != nil {
 		return data, resp, err
 	}

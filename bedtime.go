@@ -46,7 +46,7 @@ func (c *Client) GetBedtime(ctx context.Context, start string, end string) (*Ide
 	}
 
 	var bedtimes *IdealBedtimes
-	resp, err := c.Do(ctx, req, &bedtimes)
+	resp, err := c.do(ctx, req, &bedtimes)
 	if err != nil {
 		return bedtimes, resp, err
 	}

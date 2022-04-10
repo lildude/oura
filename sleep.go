@@ -78,7 +78,7 @@ func (c *Client) GetSleep(ctx context.Context, start string, end string) (*Sleep
 	}
 
 	var sleepSummaries *Sleeps
-	resp, err := c.Do(ctx, req, &sleepSummaries)
+	resp, err := c.do(ctx, req, &sleepSummaries)
 	if err != nil {
 		return sleepSummaries, resp, err
 	}

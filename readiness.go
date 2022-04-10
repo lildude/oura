@@ -52,7 +52,7 @@ func (c *Client) GetReadiness(ctx context.Context, start string, end string) (*R
 	}
 
 	var readinessSummaries *ReadinessSummaries
-	resp, err := c.Do(ctx, req, &readinessSummaries)
+	resp, err := c.do(ctx, req, &readinessSummaries)
 	if err != nil {
 		return readinessSummaries, resp, err
 	}

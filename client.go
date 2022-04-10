@@ -27,24 +27,6 @@ type Client struct {
 	client    *http.Client
 }
 
-// TimeSeriesData is time series data used by various other methods.
-type TimeSeriesData struct {
-	Interval  float32   `json:"interval"`
-	Items     []float32 `json:"items"`
-	Timestamp time.Time `json:"timestamp"`
-}
-
-func (e *ErrorDetail) Error() string {
-	return e.Detail
-}
-
-// ErrorDetail holds the details of an error message
-type ErrorDetail struct {
-	Status int    `json:"status,omitempty"`
-	Title  string `json:"title,omitempty"`
-	Detail string `json:"detail"`
-}
-
 // NewClient returns a new Oura API client. If a nil httpClient is
 // provided, http.DefaultClient will be used. To use API methods which require
 // authentication, provide an http.Client that will perform the authentication
@@ -101,7 +83,7 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 // Do sends a request and returns the response. An error is returned if the request cannot
 // be sent or if the API returns an error. If a response is received, the body response body
 // is decoded and stored in the value pointed to by v.
-func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*http.Response, error) {
+func (c *Client) do(ctx context.Context, req *http.Request, v interface{}) (*http.Response, error) {
 	req = req.WithContext(ctx)
 	resp, err := c.client.Do(req)
 	if err != nil {
@@ -116,7 +98,7 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*htt
 
 	// Anything other than a HTTP 2xx response code is treated as an error.
 	if resp.StatusCode >= 300 {
-		e := ErrorDetail{}
+		e := errorDetail{}
 		err := json.Unmarshal(data, &e)
 		if err != nil {
 			return resp, err
@@ -138,6 +120,24 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*htt
 	}
 
 	return resp, err
+}
+
+// timeSeriesData is time series data used by various other methods.
+type timeSeriesData struct {
+	Interval  float32   `json:"interval"`
+	Items     []float32 `json:"items"`
+	Timestamp time.Time `json:"timestamp"`
+}
+
+func (e *errorDetail) Error() string {
+	return e.Detail
+}
+
+// errorDetail holds the details of an error message
+type errorDetail struct {
+	Status int    `json:"status,omitempty"`
+	Title  string `json:"title,omitempty"`
+	Detail string `json:"detail"`
 }
 
 // parametiseDate takes the arguments and URL encodes them into a string
