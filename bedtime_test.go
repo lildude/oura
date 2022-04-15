@@ -21,7 +21,7 @@ var bedtimeTestCases = []struct {
 		name:        "get bedtime without specific dates",
 		start:       "",
 		end:         "",
-		expectedURL: "/bedtime",
+		expectedURL: "/v1/bedtime",
 		mock: `{
 			"ideal_bedtimes": [
 				{
@@ -47,7 +47,7 @@ var bedtimeTestCases = []struct {
 		name:        "get bedtime with only start date",
 		start:       "2020-01-20",
 		end:         "",
-		expectedURL: "/bedtime?start=2020-01-20",
+		expectedURL: "/v1/bedtime?start=2020-01-20",
 		mock: `{
 			"ideal_bedtimes": [
 				{
@@ -73,7 +73,7 @@ var bedtimeTestCases = []struct {
 		name:        "get bedtime with start and end dates",
 		start:       "2020-01-20",
 		end:         "2020-01-22",
-		expectedURL: "/bedtime?end=2020-01-22&start=2020-01-20",
+		expectedURL: "/v1/bedtime?end=2020-01-22&start=2020-01-20",
 		mock: `{
 			"ideal_bedtimes": [
 				{
@@ -105,7 +105,7 @@ func testGetBedtime(t *testing.T, start, end, expectedURL, mock string) {
 	client, mux, _, teardown := setup()
 	defer teardown()
 
-	mux.HandleFunc("/bedtime", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v1/bedtime", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method)
 		assert.Equal(t, expectedURL, r.URL.String())
 		fmt.Fprint(w, mock)
@@ -115,7 +115,7 @@ func testGetBedtime(t *testing.T, start, end, expectedURL, mock string) {
 	assert.NoError(t, err, "should not return an error")
 
 	want := &IdealBedtimes{}
-	json.Unmarshal([]byte(mock), want)
+	json.Unmarshal([]byte(mock), want) //nolint:errcheck
 
 	assert.ObjectsAreEqual(want, got)
 }

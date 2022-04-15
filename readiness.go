@@ -33,7 +33,7 @@ type ReadinessSummaries struct {
 // 	"If you omit the start date, it will be set to one week ago.
 //	 If you omit the end date, it will be set to the current day."
 func (c *Client) GetReadiness(ctx context.Context, start string, end string) (*ReadinessSummaries, *http.Response, error) {
-	path := "readiness"
+	path := "v1/readiness"
 	params := url.Values{}
 
 	if start != "" {
@@ -52,7 +52,7 @@ func (c *Client) GetReadiness(ctx context.Context, start string, end string) (*R
 	}
 
 	var readinessSummaries *ReadinessSummaries
-	resp, err := c.Do(ctx, req, &readinessSummaries)
+	resp, err := c.do(ctx, req, &readinessSummaries)
 	if err != nil {
 		return readinessSummaries, resp, err
 	}

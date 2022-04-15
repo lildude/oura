@@ -16,14 +16,13 @@ type UserInfo struct {
 
 // GetUserInfo returns the user information for the current user
 func (c *Client) GetUserInfo(ctx context.Context) (*UserInfo, *http.Response, error) {
-	req, err := c.NewRequest("GET", "userinfo", nil)
+	req, err := c.NewRequest("GET", "v1/userinfo", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var userInfo *UserInfo
-	resp, err := c.Do(ctx, req, &userInfo)
-
+	resp, err := c.do(ctx, req, &userInfo)
 	if err != nil {
 		return userInfo, resp, err
 	}

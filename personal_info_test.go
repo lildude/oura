@@ -2,6 +2,7 @@ package oura
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"testing"
@@ -9,10 +10,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var infoTestCases = []struct {
+var personalInfoTestCases = []struct {
 	name     string
 	mock     string
-	expected UserInfo
+	expected PersonalInfo
 }{
 	{
 		name: "Regular info",
@@ -20,16 +21,9 @@ var infoTestCases = []struct {
 			"age": 27,
 			"weight": 80,
 			"height": 180,
-			"gender": "male",
+			"biological_sex": "male",
 			"email": "john.doe@the.domain"
 		}`,
-		expected: UserInfo{
-			Age:    27,
-			Weight: 80.0,
-			Height: 180,
-			Gender: "male",
-			Email:  "john.doe@the.domain",
-		},
 	},
 	{
 		name: "Info w/ weight & height as float",
@@ -37,31 +31,28 @@ var infoTestCases = []struct {
 			"age": 27,
 			"weight": 80.0,
 			"height": 180.0,
-			"gender": "male",
+			"biological_sex": "male",
 			"email": "john.doe@the.domain"
 		}`,
-		expected: UserInfo{
-			Age:    27,
-			Weight: 80.0,
-			Height: 180.0,
-			Gender: "male",
-			Email:  "john.doe@the.domain",
-		},
 	},
 }
 
-func TestUserInfo(t *testing.T) {
-	for _, tc := range infoTestCases {
+func TestPersonalInfo(t *testing.T) {
+	for _, tc := range personalInfoTestCases {
 		client, mux, _, teardown := setup()
 		defer teardown()
 
-		mux.HandleFunc("/v1/userinfo", func(w http.ResponseWriter, r *http.Request) {
+		mux.HandleFunc("/v2/usercollection/personal_info", func(w http.ResponseWriter, r *http.Request) {
 			assert.Equal(t, http.MethodGet, r.Method)
 			fmt.Fprint(w, tc.mock)
 		})
 
-		got, _, err := client.GetUserInfo(context.Background())
+		got, _, err := client.PersonalInfo(context.Background())
 		assert.NoError(t, err, tc.name+" should not return an error")
+
+		want := &PersonalInfo{}
+		json.Unmarshal([]byte(tc.mock), want) //nolint:errcheck
+
 		assert.ObjectsAreEqual(tc.expected, got)
 	}
 }

@@ -17,7 +17,7 @@ import (
 func TestNewClient(t *testing.T) {
 	c := NewClient(nil)
 
-	assert.Equal(t, BaseURLV1, c.baseURL.String(), "should configure the client to use the default url")
+	assert.Equal(t, BaseURL, c.baseURL.String(), "should configure the client to use the default url")
 	assert.Equal(t, "go-oura", c.UserAgent, "should configure the client to use the default user-agent")
 }
 
@@ -28,8 +28,7 @@ func TestNewRequest(t *testing.T) {
 	c := NewClient(nil)
 
 	t.Run("valid request", func(tc *testing.T) {
-
-		inURL, outURL := "foo", BaseURLV1+"foo"
+		inURL, outURL := "foo", BaseURL+"foo"
 		inBody, outBody := &UserInfo{Age: 99, Weight: 102, Gender: "ano", Email: "user@example.com", Height: 184}, `{"age":99,"email":"user@example.com","gender":"ano","height":184,"weight":102}`+"\n"
 
 		req, err := c.NewRequest("GET", inURL, inBody)
@@ -64,7 +63,6 @@ func TestNewRequest(t *testing.T) {
 		assert.Nil(tc, err, "should not return an error")
 		assert.Nil(tc, req.Body, "should return an empty body")
 	})
-
 }
 
 // TestDo confirms that Do returns a JSON decoded value when making a request. It
@@ -86,7 +84,7 @@ func TestDo(t *testing.T) {
 		got := new(foo)
 
 		req, _ := client.NewRequest("GET", ".", nil)
-		client.Do(context.Background(), req, got)
+		client.do(context.Background(), req, got) //nolint:errcheck
 
 		assert.ObjectsAreEqual(want, got)
 	})
@@ -101,7 +99,7 @@ func TestDo(t *testing.T) {
 		})
 
 		req, _ := client.NewRequest("GET", ".", nil)
-		resp, err := client.Do(context.Background(), req, nil)
+		resp, err := client.do(context.Background(), req, nil)
 
 		assert.Equal(tc, http.StatusInternalServerError, resp.StatusCode)
 		assert.Error(tc, err, "should return an error")
@@ -120,7 +118,7 @@ func TestDo(t *testing.T) {
 
 		req, _ := client.NewRequest("GET", ".", nil)
 		got := new(foo)
-		resp, err := client.Do(context.Background(), req, got)
+		resp, err := client.do(context.Background(), req, got)
 
 		assert.Equal(tc, http.StatusOK, resp.StatusCode)
 		assert.Nil(tc, err, "should not return an error")
@@ -154,13 +152,13 @@ func TestDo(t *testing.T) {
 
 		req, _ := client.NewRequest("GET", ".", nil)
 		got := new(foo)
-		resp, err := client.Do(context.Background(), req, got)
+		resp, err := client.do(context.Background(), req, got)
 
 		assert.Equal(tc, http.StatusOK, resp.StatusCode)
 		assert.Error(tc, err, "should return an error")
 	})
 
-	t.Run("request on a cancelled context", func(tc *testing.T) {
+	t.Run("GET request on a cancelled context", func(tc *testing.T) {
 		client, mux, _, teardown := setup()
 		defer teardown()
 
@@ -172,7 +170,7 @@ func TestDo(t *testing.T) {
 		req, _ := client.NewRequest("GET", ".", nil)
 		ctx, cancel := context.WithCancel(context.Background())
 		cancel()
-		resp, err := client.Do(ctx, req, nil)
+		resp, err := client.do(ctx, req, nil)
 
 		assert.Error(tc, err, "should return an error")
 		assert.Nil(tc, resp, "should not return a response")
@@ -188,19 +186,32 @@ func TestDo(t *testing.T) {
 		})
 
 		req, _ := client.NewRequest("GET", ".", nil)
-		resp, err := client.Do(context.Background(), req, nil)
+		resp, err := client.do(context.Background(), req, nil)
 
 		assert.Equal(tc, http.StatusForbidden, resp.StatusCode)
 		assert.Error(tc, err, "should return an error")
-		if _, ok := err.(AuthError); ok == false {
-			t.Errorf("should return a starling.AuthError: %T", err)
-		}
-		if err, ok := err.(Error); ok == true && err.Temporary() == true {
-			t.Errorf("should not return a temporary error")
-		}
-
 	})
 
+	t.Run("GET request that returns an error response", func(tc *testing.T) {
+		client, mux, _, teardown := setup()
+		defer teardown()
+
+		mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+			assert.Equal(tc, http.MethodGet, r.Method)
+			w.WriteHeader(http.StatusBadRequest)
+			resp := `{
+				"detail": "Start date is greater than end date: [start_date: 2020-01-25; end_date: 2020-01-22]"
+			}`
+			fmt.Fprintln(w, resp)
+		})
+
+		req, _ := client.NewRequest("GET", ".", nil)
+		resp, err := client.do(context.Background(), req, nil)
+
+		assert.Equal(tc, http.StatusBadRequest, resp.StatusCode)
+		assert.Error(tc, err, "should return an error")
+		assert.EqualError(tc, err, "Bad Request: Start date is greater than end date: [start_date: 2020-01-25; end_date: 2020-01-22]")
+	})
 }
 
 // Setup establishes a test Server that can be used to provide mock responses during testing.

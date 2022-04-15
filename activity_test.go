@@ -21,7 +21,7 @@ var activitiesTestCases = []struct {
 		name:        "get activity without specific dates",
 		start:       "",
 		end:         "",
-		expectedURL: "/activity",
+		expectedURL: "/v1/activity",
 		mock: `{
 			"activity": [{
 				"summary_date": "2016-09-03",
@@ -62,7 +62,7 @@ var activitiesTestCases = []struct {
 		name:        "get activity with only start date",
 		start:       "2020-01-20",
 		end:         "",
-		expectedURL: "/activity?start=2020-01-20",
+		expectedURL: "/v1/activity?start=2020-01-20",
 		mock: `{
 			"activity": [
 				{"summary_date": "2020-01-20"},
@@ -76,7 +76,7 @@ var activitiesTestCases = []struct {
 		name:        "get activity with start and end dates",
 		start:       "2020-01-20",
 		end:         "2020-01-22",
-		expectedURL: "/activity?end=2020-01-22&start=2020-01-20",
+		expectedURL: "/v1/activity?end=2020-01-22&start=2020-01-20",
 		mock: `{
 			"activity": [
 				{"summary_date": "2020-01-20"},
@@ -99,7 +99,7 @@ func testGetActivities(t *testing.T, start, end, expectedURL, mock string) {
 	client, mux, _, teardown := setup()
 	defer teardown()
 
-	mux.HandleFunc("/activity", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v1/activity", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method)
 		assert.Equal(t, expectedURL, r.URL.String())
 		fmt.Fprint(w, mock)
@@ -109,7 +109,7 @@ func testGetActivities(t *testing.T, start, end, expectedURL, mock string) {
 	assert.NoError(t, err, "should not return an error")
 
 	want := &Activities{}
-	json.Unmarshal([]byte(mock), want)
+	json.Unmarshal([]byte(mock), want) //nolint:errcheck
 
 	assert.ObjectsAreEqual(want, got)
 }

@@ -21,7 +21,7 @@ var readinessTestCases = []struct {
 		name:        "get readiness without specific dates",
 		start:       "",
 		end:         "",
-		expectedURL: "/readiness",
+		expectedURL: "/v1/readiness",
 		mock: `{
 			"readiness": [{
 				"summary_date": "2016-09-03",
@@ -43,7 +43,7 @@ var readinessTestCases = []struct {
 		name:        "get readiness with only start date",
 		start:       "2020-01-20",
 		end:         "",
-		expectedURL: "/readiness?start=2020-01-20",
+		expectedURL: "/v1/readiness?start=2020-01-20",
 		mock: `{
 			"readiness": [{
 				"summary_date": "2020-01-20",
@@ -67,7 +67,7 @@ var readinessTestCases = []struct {
 		name:        "get readiness with start and end dates",
 		start:       "2020-01-20",
 		end:         "2020-01-22",
-		expectedURL: "/readiness?end=2020-01-22&start=2020-01-20",
+		expectedURL: "/v1/readiness?end=2020-01-22&start=2020-01-20",
 		mock: `{
 			"readiness": [{
 				"summary_date": "2020-01-20",
@@ -97,7 +97,7 @@ func testGetReadiness(t *testing.T, start, end, expectedURL, mock string) {
 	client, mux, _, teardown := setup()
 	defer teardown()
 
-	mux.HandleFunc("/readiness", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/v1/readiness", func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, http.MethodGet, r.Method)
 		assert.Equal(t, expectedURL, r.URL.String())
 		fmt.Fprint(w, mock)
@@ -107,7 +107,7 @@ func testGetReadiness(t *testing.T, start, end, expectedURL, mock string) {
 	assert.NoError(t, err, "should not return an error")
 
 	want := &ReadinessSummaries{}
-	json.Unmarshal([]byte(mock), want)
+	json.Unmarshal([]byte(mock), want) //nolint:errcheck
 
 	assert.ObjectsAreEqual(want, got)
 }
