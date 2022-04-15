@@ -2,6 +2,7 @@ builds:
   - skip: true
 changelog:
   sort: asc
+  use: github
   filters:
     exclude:
       - '^docs:'
