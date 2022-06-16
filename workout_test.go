@@ -30,7 +30,7 @@ var workoutCases = []struct {
 					"activity": "walking",
 					"calories": 106.206,
 					"day": "2022-04-02",
-					"distance": "2.3",
+					"distance": 2.3,
 					"end_datetime": "2022-04-02T15:12:00+01:00",
 					"intensity": "moderate",
 					"label": "foo",
@@ -41,7 +41,7 @@ var workoutCases = []struct {
 					"activity": "cycling",
 					"calories": 350.784,
 					"day": "2022-04-02",
-					"distance": "50.2",
+					"distance": 50.2,
 					"end_datetime": "2022-04-02T20:36:00+01:00",
 					"intensity": "moderate",
 					"label": "bar",
@@ -99,8 +99,7 @@ func testWorkouts(t *testing.T, start_date, end_date, next_token, expectedURL, m
 	got, _, err := client.Workouts(context.Background(), start_date, end_date, next_token)
 	assert.NoError(t, err, "should not return an error")
 
-	want := &Sessions{}
+	want := &Workouts{}
 	json.Unmarshal([]byte(mock), want) //nolint:errcheck
-
 	assert.ObjectsAreEqual(want, got)
 }

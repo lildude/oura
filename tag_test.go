@@ -84,7 +84,7 @@ func testTags(t *testing.T, start_date, end_date, next_token, expectedURL, mock 
 	got, _, err := client.Tags(context.Background(), start_date, end_date, next_token)
 	assert.NoError(t, err, "should not return an error")
 
-	want := &Sessions{}
+	want := &Tags{}
 	json.Unmarshal([]byte(mock), want) //nolint:errcheck
 
 	assert.ObjectsAreEqual(want, got)
