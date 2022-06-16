@@ -21,8 +21,8 @@ type Workout struct {
 
 // Workouts represents the workout data within a given timeframe.
 type Workouts struct {
-	Data      []Tag  `json:"data"`
-	NextToken string `json:"next_token"`
+	Data      []Workout `json:"data"`
+	NextToken string    `json:"next_token"`
 }
 
 // Workout gets the workout data within a given timeframe.
