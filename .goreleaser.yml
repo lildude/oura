@@ -2,11 +2,12 @@ builds:
   - skip: true
 changelog:
   sort: asc
-  use: github
+  use: github-native
   filters:
     exclude:
       - '^docs:'
       - '^test:'
+      - '^misc:'
       - '^Merge pull request'
 release:
   draft: true
