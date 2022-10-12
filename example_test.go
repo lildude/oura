@@ -85,6 +85,40 @@ func Example_dailyActivity() {
 	// Output
 }
 
+func Example_dailyReadiness() {
+	godotenv.Load(".env") //nolint:errcheck
+	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
+	ctx := context.Background()
+	tc := oauth2.NewClient(ctx, ts)
+
+	cl := oura.NewClient(tc)
+	dailyReadiness, httpResp, err := cl.DailyReadinesses(ctx, "2022-03-20", "2022-03-22", "")
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println(httpResp)
+	} else {
+		fmt.Println(dailyReadiness)
+	}
+	// Output
+}
+
+func Example_dailySleep() {
+	godotenv.Load(".env") //nolint:errcheck
+	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
+	ctx := context.Background()
+	tc := oauth2.NewClient(ctx, ts)
+
+	cl := oura.NewClient(tc)
+	dailySleeps, httpResp, err := cl.DailySleeps(ctx, "2022-03-20", "2022-03-22", "")
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println(httpResp)
+	} else {
+		fmt.Println(dailySleeps)
+	}
+	// Output
+}
+
 func Example_heartrate() {
 	godotenv.Load(".env") //nolint:errcheck
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
@@ -132,6 +166,23 @@ func Example_session() {
 		fmt.Println(httpResp)
 	} else {
 		fmt.Println(session)
+	}
+	// Output
+}
+
+func Example_sleep() {
+	godotenv.Load(".env") //nolint:errcheck
+	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
+	ctx := context.Background()
+	tc := oauth2.NewClient(ctx, ts)
+
+	cl := oura.NewClient(tc)
+	sleeps, httpResp, err := cl.Sleeps(ctx, "2022-03-20", "2022-03-22", "")
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println(httpResp)
+	} else {
+		fmt.Println(sleeps)
 	}
 	// Output
 }
