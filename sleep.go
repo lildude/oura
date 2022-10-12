@@ -54,9 +54,54 @@ type Sleeps struct {
 	Sleeps []Sleep `json:"sleep"`
 }
 
+// SleepPeriod represents a sleep period.
+type SleepPeriod struct {
+	AverageBreath       *float32          `json:"average_breath,omitempty"`
+	AverageHeartRate    *float32          `json:"average_heart_rate,omitempty"`
+	AverageHrv          *int              `json:"average_hrv,omitempty"`
+	AwakeTime           *int              `json:"awake_time,omitempty"`
+	BedtimeEnd          time.Time         `json:"bedtime_end"`
+	BedtimeStart        time.Time         `json:"bedtime_start"`
+	Day                 string            `json:"day"`
+	DeepSleepDuration   *int              `json:"deep_sleep_duration,omitempty"`
+	Efficiency          *int              `json:"efficiency,omitempty"`
+	HeartRate           *timeSeriesData   `json:"heart_rate,omitempty"`
+	Hrv                 *timeSeriesData   `json:"hrv,omitempty"`
+	Latency             *int              `json:"latency,omitempty"`
+	LightSleepDuration  *int              `json:"light_sleep_duration,omitempty"`
+	LowBatteryAlert     bool              `json:"low_battery_alert"`
+	LowestHeartRate     *int              `json:"lowest_heart_rate,omitempty"`
+	Movement30Sec       *string           `json:"movement_30_sec,omitempty"`
+	Period              int               `json:"period"`
+	Readiness           *ReadinessSummary `json:"readiness,omitempty"`
+	ReadinessScoreDelta *int              `json:"readiness_score_delta,omitempty"`
+	RemSleepDuration    *int              `json:"rem_sleep_duration,omitempty"`
+	RestlessPeriods     *int              `json:"restless_periods,omitempty"`
+	SleepPhase5Min      *string           `json:"sleep_phase_5_min,omitempty"`
+	SleepScoreDelta     *int              `json:"sleep_score_delta,omitempty"`
+	TimeInBed           int               `json:"time_in_bed"`
+	TotalSleepDuration  *int              `json:"total_sleep_duration,omitempty"`
+	Type                string            `json:"type,omitempty"`
+}
+
+// SleepPeriods represents the sleep data for a given timeframe.
+type SleepPeriods struct {
+	Data      []SleepPeriod `json:"data"`
+	NextToken string        `json:"next_token"`
+}
+
+type ReadinessSummary struct {
+	// Object defining readiness score contributors.
+	Contributors              ReadinessContributors `json:"contributors"`
+	Score                     *int                  `json:"score,omitempty"`
+	TemperatureDeviation      *float32              `json:"temperature_deviation,omitempty"`
+	TemperatureTrendDeviation *float32              `json:"temperature_trend_deviation,omitempty"`
+}
+
 // GetSleep gets all of the sleeps for a specified period of time.
 // If a start and end date are not provided, ie are empty strings, we fall back to Oura which states:
-// 	"If you omit the start date, it will be set to one week ago.
+//
+//	"If you omit the start date, it will be set to one week ago.
 //	 If you omit the end date, it will be set to the current day."
 func (c *Client) GetSleep(ctx context.Context, start string, end string) (*Sleeps, *http.Response, error) {
 	path := "v1/sleep"
@@ -84,4 +129,25 @@ func (c *Client) GetSleep(ctx context.Context, start string, end string) (*Sleep
 	}
 
 	return sleepSummaries, resp, nil
+}
+
+// Sleeps gets the detailed sleep data for a specified period of time.
+// If a start and end date are not provided, ie are empty strings, we fall back to Oura's defaults which are:
+//
+//	start_date: end_date - 1 day
+//	end_date: current UTC date
+func (c *Client) Sleeps(ctx context.Context, start_date, end_date, next_token string) (*SleepPeriods, *http.Response, error) {
+	path := parametiseDate("/v2/usercollection/sleep", start_date, end_date, next_token)
+	req, err := c.NewRequest("GET", path, nil)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	var data *SleepPeriods
+	resp, err := c.do(ctx, req, &data)
+	if err != nil {
+		return data, resp, err
+	}
+
+	return data, resp, nil
 }
