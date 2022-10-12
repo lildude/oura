@@ -8,11 +8,11 @@ import (
 
 // DailyActivity represents the data returned from the Oura API for a single activity.
 type DailyActivity struct {
-	Class5min                 string         `json:"class_5_min"`
-	Score                     int            `json:"score"`
 	ActiveCalories            int            `json:"active_calories"`
 	AverageMetMinutes         float32        `json:"average_met_minutes"`
+	Class5min                 string         `json:"class_5_min"`
 	Contributors              Contributors   `json:"contributors"`
+	Day                       string         `json:"day"`
 	EquivalentWalkingDistance int            `json:"equivalent_walking_distance"`
 	HighActivityMetMinutes    int            `json:"high_activity_met_minutes"`
 	HighActivityTime          int            `json:"high_activity_time"`
@@ -25,14 +25,14 @@ type DailyActivity struct {
 	MetersToTarget            int            `json:"meters_to_target"`
 	NonWearTime               int            `json:"non_wear_time"`
 	RestingTime               int            `json:"resting_time"`
+	Score                     int            `json:"score"`
 	SedentaryMetMinutes       int            `json:"sedentary_met_minutes"`
 	SedentaryTime             int            `json:"sedentary_time"`
 	Steps                     int            `json:"steps"`
 	TargetCalories            int            `json:"target_calories"`
 	TargetMeters              int            `json:"target_meters"`
-	TotalCalories             int            `json:"total_calories"`
-	Day                       string         `json:"day"`
 	Timestamp                 time.Time      `json:"timestamp"`
+	TotalCalories             int            `json:"total_calories"`
 }
 
 // DailyActivities represents the data returned from the Oura API for a list of daily activity summaries.
@@ -53,7 +53,8 @@ type Contributors struct {
 
 // DailyActivities gets the daily activity summary values and detailed activity levels for a specified period of time.
 // If a start and end date are not provided, ie are empty strings, we fall back to Oura's defaults which are:
-// 	start_date: end_date - 1 day
+//
+//	start_date: end_date - 1 day
 //	end_date: current UTC date
 func (c *Client) DailyActivities(ctx context.Context, start_date, end_date, next_token string) (*DailyActivities, *http.Response, error) {
 	path := parametiseDate("v2/usercollection/daily_activity", start_date, end_date, next_token)
