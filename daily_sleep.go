@@ -17,30 +17,30 @@ type DailySleep struct {
 // DailySleeps represents the sleep data for a given timeframe.
 type DailySleeps struct {
 	Data      []DailySleep `json:"data"`
-	NextToken string       `json:"next_token"`
+	NextToken *string      `json:"next_token,omitempty"`
 }
 
 // Sleep score contributors
 type SleepContributors struct {
-	// Contribution of deep sleep in range [1, 100].
+	// Contribution of deep sleep in range `[1, 100]`.
 	DeepSleep *int `json:"deep_sleep"`
 
-	// Contribution of sleep efficiency in range [1, 100].
+	// Contribution of sleep efficiency in range `[1, 100]`.
 	Efficiency *int `json:"efficiency"`
 
-	// Contribution of sleep latency in range [1, 100].
+	// Contribution of sleep latency in range `[1, 100]`.
 	Latency *int `json:"latency"`
 
-	// Contribution of REM sleep in range [1, 100].
+	// Contribution of REM sleep in range `[1, 100]`.
 	RemSleep *int `json:"rem_sleep"`
 
-	// Contribution of sleep restfulness in range [1, 100].
+	// Contribution of sleep restfulness in range `[1, 100]`.
 	Restfulness *int `json:"restfulness"`
 
-	// Contribution of sleep timing in range [1, 100].
+	// Contribution of sleep timing in range `[1, 100]`.
 	Timing *int `json:"timing"`
 
-	// Contribution of total sleep in range [1, 100].
+	// Contribution of total sleep in range `[1, 100]`.
 	TotalSleep *int `json:"total_sleep"`
 }
 

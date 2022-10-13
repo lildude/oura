@@ -124,8 +124,13 @@ func (c *Client) do(ctx context.Context, req *http.Request, v interface{}) (*htt
 
 // timeSeriesData is time series data used by various other methods.
 type timeSeriesData struct {
-	Interval  float32   `json:"interval"`
-	Items     []float32 `json:"items"`
+	// The number of seconds between records
+	Interval float32 `json:"interval"`
+
+	// The recorded values
+	Items []float32 `json:"items"`
+
+	// ISO 8601 formatted local timestamp indicating the start datetime of when the data was collected
 	Timestamp time.Time `json:"timestamp"`
 }
 
@@ -135,9 +140,9 @@ func (e *errorDetail) Error() string {
 
 // errorDetail holds the details of an error message
 type errorDetail struct {
-	Status int    `json:"status,omitempty"`
-	Title  string `json:"title,omitempty"`
-	Detail string `json:"detail"`
+	Status *int    `json:"status,omitempty"`
+	Title  *string `json:"title,omitempty"`
+	Detail string  `json:"detail"`
 }
 
 // parametiseDate takes the arguments and URL encodes them into a string

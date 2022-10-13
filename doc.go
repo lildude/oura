@@ -14,7 +14,7 @@ different functions of the Oura API. For example:
 	user, _, err := client.GetUserInfo(ctx, nil)
 
 All of the API calls will require you to pass in an access token. This can
-be a personal access token of a full OAuth2 access token:
+be a personal access token or a full OAuth2 access token:
 
 	ts := oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: "TOKEN"},
@@ -32,6 +32,5 @@ For example, `GetActivities` queries the v1 API, and `DailyActivities` queries
 the v2 API. `GetUserInfo` queries the v1 API and `PersonalInfo` queries the v2 API.
 
 The Oura API documentation is available at https://cloud.ouraring.com/v2/docs.
-
 */
 package oura

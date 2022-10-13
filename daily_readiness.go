@@ -18,34 +18,35 @@ type DailyReadiness struct {
 
 // DailyReadinesses represents the readiness data for a given timeframe.
 type DailyReadinesses struct {
-	Data      []DailyReadiness `json:"data"`
-	NextToken string           `json:"next_token"`
+	Data []DailyReadiness `json:"data"`
+	// Pagination token
+	NextToken *string `json:"next_token,omitempty"`
 }
 
 // Readiness score contributors
 type ReadinessContributors struct {
-	// Contribution of cumulative activity balance in range [1, 100].
+	// Contribution of cumulative activity balance in range `[1, 100]`.
 	ActivityBalance *int `json:"activity_balance"`
 
-	// Contribution of body temperature in range [1, 100].
+	// Contribution of body temperature in range `[1, 100]`.
 	BodyTemperature *int `json:"body_temperature"`
 
-	// Contribution of heart rate variability balance in range [1, 100].
+	// Contribution of heart rate variability balance in range `[1, 100]`.
 	HrvBalance *int `json:"hrv_balance"`
 
-	// Contribution of previous day's activity in range [1, 100].
+	// Contribution of previous day's activity in range `[1, 100]`.
 	PreviousDayActivity *int `json:"previous_day_activity"`
 
-	// Contribution of previous night's sleep in range [1, 100].
+	// Contribution of previous night's sleep in range `[1, 100]`.
 	PreviousNight *int `json:"previous_night"`
 
-	// Contribution of recovery index in range [1, 100].
+	// Contribution of recovery index in range `[1, 100]`.
 	RecoveryIndex *int `json:"recovery_index"`
 
-	// Contribution of resting heart rate in range [1, 100].
+	// Contribution of resting heart rate in range `[1, 100]`.
 	RestingHeartRate *int `json:"resting_heart_rate"`
 
-	// Contribution of sleep balance in range [1, 100].
+	// Contribution of sleep balance in range `[1, 100]`.
 	SleepBalance *int `json:"sleep_balance"`
 }
 

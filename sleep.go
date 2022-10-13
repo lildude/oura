@@ -86,12 +86,12 @@ type SleepPeriod struct {
 
 // SleepPeriods represents the sleep data for a given timeframe.
 type SleepPeriods struct {
-	Data      []SleepPeriod `json:"data"`
-	NextToken string        `json:"next_token"`
+	Data []SleepPeriod `json:"data"`
+	// Pagination token
+	NextToken *string `json:"next_token,omitempty"`
 }
 
 type ReadinessSummary struct {
-	// Object defining readiness score contributors.
 	Contributors              ReadinessContributors `json:"contributors"`
 	Score                     *int                  `json:"score,omitempty"`
 	TemperatureDeviation      *float32              `json:"temperature_deviation,omitempty"`
@@ -137,7 +137,7 @@ func (c *Client) GetSleep(ctx context.Context, start string, end string) (*Sleep
 //	start_date: end_date - 1 day
 //	end_date: current UTC date
 func (c *Client) Sleeps(ctx context.Context, start_date, end_date, next_token string) (*SleepPeriods, *http.Response, error) {
-	path := parametiseDate("/v2/usercollection/sleep", start_date, end_date, next_token)
+	path := parametiseDate("v2/usercollection/sleep", start_date, end_date, next_token)
 	req, err := c.NewRequest("GET", path, nil)
 	if err != nil {
 		return nil, nil, err
