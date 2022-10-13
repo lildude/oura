@@ -58,13 +58,13 @@ type Sessions struct {
 //	end_date: current UTC date
 func (c *Client) Sessions(ctx context.Context, start_date, end_date, next_token string) (*Sessions, *http.Response, error) {
 	path := parametiseDate("v2/usercollection/session", start_date, end_date, next_token)
-	req, err := c.NewRequest("GET", path, nil)
+	req, err := c.NewRequest(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var data *Sessions
-	resp, err := c.do(ctx, req, &data)
+	resp, err := c.do(req, &data)
 	if err != nil {
 		return data, resp, err
 	}

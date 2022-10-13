@@ -40,13 +40,13 @@ func (c *Client) GetBedtime(ctx context.Context, start string, end string) (*Ide
 		path += fmt.Sprintf("?%s", params.Encode())
 	}
 
-	req, err := c.NewRequest("GET", path, nil)
+	req, err := c.NewRequest(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var bedtimes *IdealBedtimes
-	resp, err := c.do(ctx, req, &bedtimes)
+	resp, err := c.do(req, &bedtimes)
 	if err != nil {
 		return bedtimes, resp, err
 	}

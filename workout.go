@@ -57,13 +57,13 @@ type Workouts struct {
 //	end_date: current UTC date
 func (c *Client) Workouts(ctx context.Context, start_date, end_date, next_token string) (*Workouts, *http.Response, error) {
 	path := parametiseDate("v2/usercollection/workout", start_date, end_date, next_token)
-	req, err := c.NewRequest("GET", path, nil)
+	req, err := c.NewRequest(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var data *Workouts
-	resp, err := c.do(ctx, req, &data)
+	resp, err := c.do(req, &data)
 	if err != nil {
 		return data, resp, err
 	}

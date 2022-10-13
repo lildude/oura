@@ -24,13 +24,13 @@ type PersonalInfo struct {
 }
 
 func (c *Client) PersonalInfo(ctx context.Context) (*PersonalInfo, *http.Response, error) {
-	req, err := c.NewRequest("GET", "v2/usercollection/personal_info", nil)
+	req, err := c.NewRequest(ctx, "GET", "v2/usercollection/personal_info", nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var data *PersonalInfo
-	resp, err := c.do(ctx, req, &data)
+	resp, err := c.do(req, &data)
 	if err != nil {
 		return data, resp, err
 	}

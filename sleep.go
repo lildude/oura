@@ -117,13 +117,13 @@ func (c *Client) GetSleep(ctx context.Context, start string, end string) (*Sleep
 		path += fmt.Sprintf("?%s", params.Encode())
 	}
 
-	req, err := c.NewRequest("GET", path, nil)
+	req, err := c.NewRequest(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var sleepSummaries *Sleeps
-	resp, err := c.do(ctx, req, &sleepSummaries)
+	resp, err := c.do(req, &sleepSummaries)
 	if err != nil {
 		return sleepSummaries, resp, err
 	}
@@ -138,13 +138,13 @@ func (c *Client) GetSleep(ctx context.Context, start string, end string) (*Sleep
 //	end_date: current UTC date
 func (c *Client) Sleeps(ctx context.Context, start_date, end_date, next_token string) (*SleepPeriods, *http.Response, error) {
 	path := parametiseDate("v2/usercollection/sleep", start_date, end_date, next_token)
-	req, err := c.NewRequest("GET", path, nil)
+	req, err := c.NewRequest(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var data *SleepPeriods
-	resp, err := c.do(ctx, req, &data)
+	resp, err := c.do(req, &data)
 	if err != nil {
 		return data, resp, err
 	}

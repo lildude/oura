@@ -72,13 +72,13 @@ func (c *Client) GetActivities(ctx context.Context, start string, end string) (*
 		path += fmt.Sprintf("?%s", params.Encode())
 	}
 
-	req, err := c.NewRequest("GET", path, nil)
+	req, err := c.NewRequest(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var activities *Activities
-	resp, err := c.do(ctx, req, &activities)
+	resp, err := c.do(req, &activities)
 	if err != nil {
 		return activities, resp, err
 	}

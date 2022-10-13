@@ -52,13 +52,13 @@ type ReadinessContributors struct {
 
 func (c *Client) DailyReadinesses(ctx context.Context, start_date, end_date, next_token string) (*DailyReadinesses, *http.Response, error) {
 	path := parametiseDate("/v2/usercollection/daily_readiness", start_date, end_date, next_token)
-	req, err := c.NewRequest("GET", path, nil)
+	req, err := c.NewRequest(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var data *DailyReadinesses
-	resp, err := c.do(ctx, req, &data)
+	resp, err := c.do(req, &data)
 	if err != nil {
 		return data, resp, err
 	}

@@ -46,13 +46,13 @@ func (c *Client) GetReadiness(ctx context.Context, start string, end string) (*R
 		path += fmt.Sprintf("?%s", params.Encode())
 	}
 
-	req, err := c.NewRequest("GET", path, nil)
+	req, err := c.NewRequest(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var readinessSummaries *ReadinessSummaries
-	resp, err := c.do(ctx, req, &readinessSummaries)
+	resp, err := c.do(req, &readinessSummaries)
 	if err != nil {
 		return readinessSummaries, resp, err
 	}

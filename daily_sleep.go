@@ -51,13 +51,13 @@ type SleepContributors struct {
 //	end_date: current UTC date
 func (c *Client) DailySleeps(ctx context.Context, start_date, end_date, next_token string) (*DailySleeps, *http.Response, error) {
 	path := parametiseDate("/v2/usercollection/daily_sleep", start_date, end_date, next_token)
-	req, err := c.NewRequest("GET", path, nil)
+	req, err := c.NewRequest(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var data *DailySleeps
-	resp, err := c.do(ctx, req, &data)
+	resp, err := c.do(req, &data)
 	if err != nil {
 		return data, resp, err
 	}

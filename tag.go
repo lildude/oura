@@ -35,13 +35,13 @@ type Tags struct {
 //	end_date: current UTC date
 func (c *Client) Tags(ctx context.Context, start_date, end_date, next_token string) (*Tags, *http.Response, error) {
 	path := parametiseDate("v2/usercollection/tag", start_date, end_date, next_token)
-	req, err := c.NewRequest("GET", path, nil)
+	req, err := c.NewRequest(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var data *Tags
-	resp, err := c.do(ctx, req, &data)
+	resp, err := c.do(req, &data)
 	if err != nil {
 		return data, resp, err
 	}
