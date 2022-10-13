@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
@@ -88,17 +87,17 @@ func (c *Client) do(req *http.Request, v interface{}) (*http.Response, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer resp.Body.Close()
 
-	data, err := ioutil.ReadAll(resp.Body)
+	data, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
-	resp.Body.Close()
 
 	// Anything other than a HTTP 2xx response code is treated as an error.
-	if resp.StatusCode >= 300 {
+	if resp.StatusCode >= http.StatusMultipleChoices {
 		e := errorDetail{}
-		err := json.Unmarshal(data, &e)
+		err = json.Unmarshal(data, &e)
 		if err != nil {
 			return resp, err
 		}
@@ -110,11 +109,8 @@ func (c *Client) do(req *http.Request, v interface{}) (*http.Response, error) {
 	if v != nil && len(data) != 0 {
 		err = json.Unmarshal(data, v)
 
-		switch err {
-		case nil:
-		case io.EOF:
+		if err == nil || errors.Is(err, io.EOF) {
 			err = nil
-		default:
 		}
 	}
 
@@ -133,15 +129,15 @@ type timeSeriesData struct {
 	Timestamp time.Time `json:"timestamp"`
 }
 
-func (e *errorDetail) Error() string {
-	return e.Detail
-}
-
-// errorDetail holds the details of an error message
-type errorDetail struct {
+// errorDetail holds the details of an error message.
+type errorDetail struct { //nolint:errname // This isn't an error name.
 	Status *int    `json:"status,omitempty"`
 	Title  *string `json:"title,omitempty"`
 	Detail string  `json:"detail"`
+}
+
+func (e *errorDetail) Error() string {
+	return e.Detail
 }
 
 // parametiseDate takes the arguments and URL encodes them into a string

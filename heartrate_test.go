@@ -12,17 +12,17 @@ import (
 
 var heartrateCases = []struct {
 	name        string
-	start_date  string
-	end_date    string
-	next_token  string
+	startDate   string
+	endDate     string
+	nextToken   string
 	expectedURL string
 	mock        string
 }{
 	{
 		name:        "get heartrates without specific dates",
-		start_date:  "",
-		end_date:    "",
-		next_token:  "",
+		startDate:   "",
+		endDate:     "",
+		nextToken:   "",
 		expectedURL: "/v2/usercollection/heartrate",
 		mock: `{
 			"data": [
@@ -41,30 +41,30 @@ var heartrateCases = []struct {
 					"source": "awake",
 					"timestamp": "2022-04-02T12:38:47+00:00"
 				}],
-			"next_token": "123456"
+			"nextToken": "123456"
 		}`,
 	},
 	{
 		name:        "get heartrates with only start date",
-		start_date:  "2020-01-20T00:00:00+00:00",
-		end_date:    "",
-		next_token:  "",
+		startDate:   "2020-01-20T00:00:00+00:00",
+		endDate:     "",
+		nextToken:   "",
 		expectedURL: "/v2/usercollection/heartrate?start_datetime=2020-01-20T00%3A00%3A00%2B00%3A00",
 		mock:        `{}`, // we don't care about the response
 	},
 	{
 		name:        "get heartrates with start and end dates",
-		start_date:  "2020-01-20T00:00:00+00:00",
-		end_date:    "2020-01-22T00:00:00+00:00",
-		next_token:  "",
+		startDate:   "2020-01-20T00:00:00+00:00",
+		endDate:     "2020-01-22T00:00:00+00:00",
+		nextToken:   "",
 		expectedURL: "/v2/usercollection/heartrate?end_datetime=2020-01-22T00%3A00%3A00%2B00%3A00&start_datetime=2020-01-20T00%3A00%3A00%2B00%3A00",
-		mock:        `{}`, // we don't care about the response
+		mock:        `{}`,
 	},
 	{
 		name:        "get heartrates with next token",
-		start_date:  "",
-		end_date:    "",
-		next_token:  "thisisbase64encodedjson",
+		startDate:   "",
+		endDate:     "",
+		nextToken:   "thisisbase64encodedjson",
 		expectedURL: "/v2/usercollection/heartrate?next_token=thisisbase64encodedjson",
 		mock:        `{}`, // we don't care about the response
 	},
@@ -73,13 +73,13 @@ var heartrateCases = []struct {
 func TestHeartrates(t *testing.T) {
 	for _, tc := range heartrateCases {
 		t.Run(tc.name, func(t *testing.T) {
-			testHeartrates(t, tc.start_date, tc.end_date, tc.next_token, tc.expectedURL, tc.mock)
+			testHeartrates(t, tc.startDate, tc.endDate, tc.nextToken, tc.expectedURL, tc.mock)
 		})
 	}
 }
 
-func testHeartrates(t *testing.T, start_date, end_date, next_token, expectedURL, mock string) {
-	client, mux, _, teardown := setup()
+func testHeartrates(t *testing.T, startDate, endDate, nextToken, expectedURL, mock string) {
+	client, mux, teardown := setup()
 	defer teardown()
 
 	mux.HandleFunc("/v2/usercollection/heartrate", func(w http.ResponseWriter, r *http.Request) {
@@ -88,11 +88,11 @@ func testHeartrates(t *testing.T, start_date, end_date, next_token, expectedURL,
 		fmt.Fprint(w, mock)
 	})
 
-	got, _, err := client.Heartrates(context.Background(), start_date, end_date, next_token)
+	got, _, err := client.Heartrates(context.Background(), startDate, endDate, nextToken)
 	assert.NoError(t, err, "should not return an error")
 
 	want := &Heartrate{}
-	json.Unmarshal([]byte(mock), want) //nolint:errcheck
+	json.Unmarshal([]byte(mock), want)
 
 	assert.ObjectsAreEqual(want, got)
 }

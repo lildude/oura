@@ -39,8 +39,8 @@ var personalInfoTestCases = []struct {
 
 func TestPersonalInfo(t *testing.T) {
 	for _, tc := range personalInfoTestCases {
-		client, mux, _, teardown := setup()
-		defer teardown()
+		client, mux, teardown := setup()
+		defer teardown() //nolint:gocritic // We're iterating over test cases, so we can't use t.Cleanup
 
 		mux.HandleFunc("/v2/usercollection/personal_info", func(w http.ResponseWriter, r *http.Request) {
 			assert.Equal(t, http.MethodGet, r.Method)
@@ -51,7 +51,7 @@ func TestPersonalInfo(t *testing.T) {
 		assert.NoError(t, err, tc.name+" should not return an error")
 
 		want := &PersonalInfo{}
-		json.Unmarshal([]byte(tc.mock), want) //nolint:errcheck
+		json.Unmarshal([]byte(tc.mock), want)
 
 		assert.ObjectsAreEqual(tc.expected, got)
 	}

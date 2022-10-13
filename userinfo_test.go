@@ -52,8 +52,8 @@ var infoTestCases = []struct {
 
 func TestUserInfo(t *testing.T) {
 	for _, tc := range infoTestCases {
-		client, mux, _, teardown := setup()
-		defer teardown()
+		client, mux, teardown := setup()
+		defer teardown() //nolint:gocritic // We're iterating over test cases, so we can't use t.Cleanup
 
 		mux.HandleFunc("/v1/userinfo", func(w http.ResponseWriter, r *http.Request) {
 			assert.Equal(t, http.MethodGet, r.Method)

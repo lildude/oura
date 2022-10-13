@@ -3,7 +3,7 @@ package oura
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -29,14 +29,20 @@ func TestNewRequest(t *testing.T) {
 
 	t.Run("valid request", func(tc *testing.T) {
 		inURL, outURL := "foo", BaseURL+"foo"
-		inBody, outBody := &UserInfo{Age: 99, Weight: 102, Gender: "ano", Email: "user@example.com", Height: 184}, `{"age":99,"email":"user@example.com","gender":"ano","height":184,"weight":102}`+"\n"
+		inBody, outBody := &UserInfo{
+			Age:    99,
+			Weight: 102,
+			Gender: "ano",
+			Email:  "user@example.com",
+			Height: 184,
+		}, `{"age":99,"email":"user@example.com","gender":"ano","height":184,"weight":102}`+"\n"
 
-		req, err := c.NewRequest("GET", inURL, inBody)
+		req, err := c.NewRequest(context.Background(), "GET", inURL, inBody)
 
 		assert.Nil(tc, err, "should not return an error")
 		assert.Equal(tc, outURL, req.URL.String(), "should expand relative URLs to absolute URLs")
 
-		body, _ := ioutil.ReadAll(req.Body)
+		body, _ := io.ReadAll(req.Body)
 		assert.Equal(tc, outBody, string(body), "should encode the request body as JSON")
 		assert.Equal(tc, c.UserAgent, req.Header.Get("User-Agent"), "should pass the correct user agent")
 		assert.Equal(tc, "application/json", req.Header.Get("Content-Type"), "should set the content-type as application/json")
@@ -44,22 +50,22 @@ func TestNewRequest(t *testing.T) {
 
 	t.Run("request with invalid JSON", func(tc *testing.T) {
 		type T struct{ A map[interface{}]interface{} }
-		_, err := c.NewRequest("GET", ".", &T{})
+		_, err := c.NewRequest(context.Background(), "GET", ".", &T{})
 		assert.Error(tc, err, "should return an error")
 	})
 
 	t.Run("request with an invalid URL", func(tc *testing.T) {
-		_, err := c.NewRequest("GET", ":", nil)
+		_, err := c.NewRequest(context.Background(), "GET", ":", nil)
 		assert.Error(tc, err, "should return an error")
 	})
 
 	t.Run("request with an invalid Method", func(tc *testing.T) {
-		_, err := c.NewRequest("\n", "/", nil)
+		_, err := c.NewRequest(context.Background(), "\n", "/", nil)
 		assert.Error(tc, err, "should return an error")
 	})
 
 	t.Run("request with an empty body", func(tc *testing.T) {
-		req, err := c.NewRequest("GET", ".", nil)
+		req, err := c.NewRequest(context.Background(), "GET", ".", nil)
 		assert.Nil(tc, err, "should not return an error")
 		assert.Nil(tc, req.Body, "should return an empty body")
 	})
@@ -70,7 +76,7 @@ func TestNewRequest(t *testing.T) {
 // the expected result.
 func TestDo(t *testing.T) {
 	t.Run("successful GET request", func(tc *testing.T) {
-		client, mux, _, teardown := setup()
+		client, mux, teardown := setup()
 		defer teardown()
 
 		type foo struct{ A string }
@@ -83,14 +89,14 @@ func TestDo(t *testing.T) {
 		want := &foo{"a"}
 		got := new(foo)
 
-		req, _ := client.NewRequest("GET", ".", nil)
-		client.do(context.Background(), req, got) //nolint:errcheck
+		req, _ := client.NewRequest(context.Background(), "GET", ".", nil)
+		client.do(req, got)
 
 		assert.ObjectsAreEqual(want, got)
 	})
 
 	t.Run("GET request that returns an HTTP error", func(tc *testing.T) {
-		client, mux, _, teardown := setup()
+		client, mux, teardown := setup()
 		defer teardown()
 
 		mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -98,15 +104,15 @@ func TestDo(t *testing.T) {
 			w.WriteHeader(http.StatusInternalServerError)
 		})
 
-		req, _ := client.NewRequest("GET", ".", nil)
-		resp, err := client.do(context.Background(), req, nil)
+		req, _ := client.NewRequest(context.Background(), "GET", ".", nil)
+		resp, err := client.do(req, nil)
 
 		assert.Equal(tc, http.StatusInternalServerError, resp.StatusCode)
 		assert.Error(tc, err, "should return an error")
 	})
 
 	t.Run("GET request that receives an empty payload", func(tc *testing.T) {
-		client, mux, _, teardown := setup()
+		client, mux, teardown := setup()
 		defer teardown()
 
 		type foo struct{ A string }
@@ -116,16 +122,16 @@ func TestDo(t *testing.T) {
 			w.WriteHeader(http.StatusOK)
 		})
 
-		req, _ := client.NewRequest("GET", ".", nil)
+		req, _ := client.NewRequest(context.Background(), "GET", ".", nil)
 		got := new(foo)
-		resp, err := client.do(context.Background(), req, got)
+		resp, err := client.do(req, got)
 
 		assert.Equal(tc, http.StatusOK, resp.StatusCode)
 		assert.Nil(tc, err, "should not return an error")
 	})
 
 	t.Run("GET request that receives an HTML response", func(tc *testing.T) {
-		client, mux, _, teardown := setup()
+		client, mux, teardown := setup()
 		defer teardown()
 
 		type foo struct{ A string }
@@ -150,16 +156,16 @@ func TestDo(t *testing.T) {
 			fmt.Fprintln(w, html)
 		})
 
-		req, _ := client.NewRequest("GET", ".", nil)
+		req, _ := client.NewRequest(context.Background(), "GET", ".", nil)
 		got := new(foo)
-		resp, err := client.do(context.Background(), req, got)
+		resp, err := client.do(req, got)
 
 		assert.Equal(tc, http.StatusOK, resp.StatusCode)
 		assert.Error(tc, err, "should return an error")
 	})
 
 	t.Run("GET request on a cancelled context", func(tc *testing.T) {
-		client, mux, _, teardown := setup()
+		client, mux, teardown := setup()
 		defer teardown()
 
 		mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -167,17 +173,18 @@ func TestDo(t *testing.T) {
 			w.WriteHeader(http.StatusOK)
 		})
 
-		req, _ := client.NewRequest("GET", ".", nil)
 		ctx, cancel := context.WithCancel(context.Background())
+
+		req, _ := client.NewRequest(ctx, "GET", ".", nil)
 		cancel()
-		resp, err := client.do(ctx, req, nil)
+		resp, err := client.do(req, nil)
 
 		assert.Error(tc, err, "should return an error")
 		assert.Nil(tc, resp, "should not return a response")
 	})
 
 	t.Run("GET request that returns a forbidden response", func(tc *testing.T) {
-		client, mux, _, teardown := setup()
+		client, mux, teardown := setup()
 		defer teardown()
 
 		mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -185,15 +192,15 @@ func TestDo(t *testing.T) {
 			w.WriteHeader(http.StatusForbidden)
 		})
 
-		req, _ := client.NewRequest("GET", ".", nil)
-		resp, err := client.do(context.Background(), req, nil)
+		req, _ := client.NewRequest(context.Background(), "GET", ".", nil)
+		resp, err := client.do(req, nil)
 
 		assert.Equal(tc, http.StatusForbidden, resp.StatusCode)
 		assert.Error(tc, err, "should return an error")
 	})
 
 	t.Run("GET request that returns an error response", func(tc *testing.T) {
-		client, mux, _, teardown := setup()
+		client, mux, teardown := setup()
 		defer teardown()
 
 		mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -205,8 +212,8 @@ func TestDo(t *testing.T) {
 			fmt.Fprintln(w, resp)
 		})
 
-		req, _ := client.NewRequest("GET", ".", nil)
-		resp, err := client.do(context.Background(), req, nil)
+		req, _ := client.NewRequest(context.Background(), "GET", ".", nil)
+		resp, err := client.do(req, nil)
 
 		assert.Equal(tc, http.StatusBadRequest, resp.StatusCode)
 		assert.Error(tc, err, "should return an error")
@@ -217,13 +224,13 @@ func TestDo(t *testing.T) {
 // Setup establishes a test Server that can be used to provide mock responses during testing.
 // It returns a pointer to a client, a mux, the server URL and a teardown function that
 // must be called when testing is complete.
-func setup() (client *Client, mux *http.ServeMux, serverURL string, teardown func()) {
+func setup() (client *Client, mux *http.ServeMux, teardown func()) {
 	mux = http.NewServeMux()
 	server := httptest.NewServer(mux)
 
 	c := NewClient(nil)
-	url, _ := url.Parse(server.URL + "/")
-	c.baseURL = url
+	surl, _ := url.Parse(server.URL + "/")
+	c.baseURL = surl
 
-	return c, mux, server.URL, server.Close
+	return c, mux, server.Close
 }

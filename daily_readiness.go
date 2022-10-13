@@ -23,7 +23,7 @@ type DailyReadinesses struct {
 	NextToken *string `json:"next_token,omitempty"`
 }
 
-// Readiness score contributors
+// ReadinessContributors represents all the contributors to the readiness score.
 type ReadinessContributors struct {
 	// Contribution of cumulative activity balance in range `[1, 100]`.
 	ActivityBalance *int `json:"activity_balance"`
@@ -50,8 +50,8 @@ type ReadinessContributors struct {
 	SleepBalance *int `json:"sleep_balance"`
 }
 
-func (c *Client) DailyReadinesses(ctx context.Context, start_date, end_date, next_token string) (*DailyReadinesses, *http.Response, error) {
-	path := parametiseDate("/v2/usercollection/daily_readiness", start_date, end_date, next_token)
+func (c *Client) DailyReadinesses(ctx context.Context, startDate, endDate, nextToken string) (*DailyReadinesses, *http.Response, error) {
+	path := parametiseDate("/v2/usercollection/daily_readiness", startDate, endDate, nextToken)
 	req, err := c.NewRequest(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, nil, err

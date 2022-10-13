@@ -14,41 +14,41 @@ import (
 
 var sessionCases = []struct {
 	name        string
-	start_date  string
-	end_date    string
-	next_token  string
+	startDate   string
+	endDate     string
+	nextToken   string
 	expectedURL string
 	mock        string
 }{
 	{
 		name:        "get sessions without specific dates",
-		start_date:  "",
-		end_date:    "",
-		next_token:  "",
+		startDate:   "",
+		endDate:     "",
+		nextToken:   "",
 		expectedURL: "/v2/usercollection/session",
 		mock:        `testdata/v2/session.json`,
 	},
 	{
 		name:        "get sessions with only start date",
-		start_date:  "2020-01-20",
-		end_date:    "",
-		next_token:  "",
+		startDate:   "2020-01-20",
+		endDate:     "",
+		nextToken:   "",
 		expectedURL: "/v2/usercollection/session?start_date=2020-01-20",
 		mock:        `{}`, // we don't care about the response
 	},
 	{
 		name:        "get sessions with start and end dates",
-		start_date:  "2020-01-20",
-		end_date:    "2020-01-22",
-		next_token:  "",
+		startDate:   "2020-01-20",
+		endDate:     "2020-01-22",
+		nextToken:   "",
 		expectedURL: "/v2/usercollection/session?end_date=2020-01-22&start_date=2020-01-20",
 		mock:        `{}`, // we don't care about the response
 	},
 	{
 		name:        "get sessions with next token",
-		start_date:  "",
-		end_date:    "",
-		next_token:  "thisisbase64encodedjson",
+		startDate:   "",
+		endDate:     "",
+		nextToken:   "thisisbase64encodedjson",
 		expectedURL: "/v2/usercollection/session?next_token=thisisbase64encodedjson",
 		mock:        `{}`, // we don't care about the response
 	},
@@ -62,13 +62,13 @@ func TestSessions(t *testing.T) {
 				resp, _ := os.ReadFile(tc.mock)
 				mock = string(resp)
 			}
-			testSessions(t, tc.start_date, tc.end_date, tc.next_token, tc.expectedURL, mock)
+			testSessions(t, tc.startDate, tc.endDate, tc.nextToken, tc.expectedURL, mock)
 		})
 	}
 }
 
-func testSessions(t *testing.T, start_date, end_date, next_token, expectedURL, mock string) {
-	client, mux, _, teardown := setup()
+func testSessions(t *testing.T, startDate, endDate, nextToken, expectedURL, mock string) {
+	client, mux, teardown := setup()
 	defer teardown()
 
 	mux.HandleFunc("/v2/usercollection/session", func(w http.ResponseWriter, r *http.Request) {
@@ -77,11 +77,11 @@ func testSessions(t *testing.T, start_date, end_date, next_token, expectedURL, m
 		fmt.Fprint(w, mock)
 	})
 
-	got, _, err := client.Sessions(context.Background(), start_date, end_date, next_token)
+	got, _, err := client.Sessions(context.Background(), startDate, endDate, nextToken)
 	assert.NoError(t, err, "should not return an error")
 
 	want := &Sessions{}
-	json.Unmarshal([]byte(mock), want) //nolint:errcheck
+	json.Unmarshal([]byte(mock), want)
 
 	assert.ObjectsAreEqual(want, got)
 }

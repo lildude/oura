@@ -89,7 +89,7 @@ func TestGetSleep(t *testing.T) {
 	}
 }
 
-func testGetSleep(t *testing.T, start, end, expectedURL, mock string) { //nolint:dupl
+func testGetSleep(t *testing.T, start, end, expectedURL, mock string) {
 	client, mux, teardown := setup()
 	defer teardown()
 
@@ -99,11 +99,11 @@ func testGetSleep(t *testing.T, start, end, expectedURL, mock string) { //nolint
 		fmt.Fprint(w, mock)
 	})
 
-	got, _, err := client.GetSleep(context.Background(), start, end) //nolint:bodyclose
+	got, _, err := client.GetSleep(context.Background(), start, end)
 	assert.NoError(t, err, "should not return an error")
 
 	want := &Sleeps{}
-	json.Unmarshal([]byte(mock), want) //nolint:errcheck
+	json.Unmarshal([]byte(mock), want)
 
 	assert.ObjectsAreEqual(want, got)
 }
@@ -173,7 +173,7 @@ func TestSleeps(t *testing.T) {
 	}
 }
 
-func testSleeps(t *testing.T, startDate, endDate, nextToken, expectedURL, mock string) { //nolint:dupl
+func testSleeps(t *testing.T, startDate, endDate, nextToken, expectedURL, mock string) {
 	client, mux, teardown := setup()
 	defer teardown()
 
@@ -183,11 +183,11 @@ func testSleeps(t *testing.T, startDate, endDate, nextToken, expectedURL, mock s
 		fmt.Fprint(w, mock)
 	})
 
-	got, _, err := client.Sleeps(context.Background(), startDate, endDate, nextToken) //nolint:bodyclose
+	got, _, err := client.Sleeps(context.Background(), startDate, endDate, nextToken)
 	assert.NoError(t, err, "should not return an error")
 
 	want := &Sleeps{}
-	json.Unmarshal([]byte(mock), want) //nolint:errcheck
+	json.Unmarshal([]byte(mock), want)
 
 	assert.ObjectsAreEqual(want, got)
 }

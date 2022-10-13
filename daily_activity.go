@@ -99,7 +99,7 @@ type DailyActivities struct {
 // Contributors is an alias for ActivityContributors provided for compatibility with earlier users of this library.
 type Contributors = ActivityContributors
 
-// Activity score contributors
+// ActivityContributors represents all the contributors to the activity score.
 type ActivityContributors struct {
 	// Contribution of meeting previous 7-day daily activity targets in range `[1, 100]`
 	MeetDailyTargets *int `json:"meet_daily_targets,omitempty"`
@@ -123,10 +123,10 @@ type ActivityContributors struct {
 // DailyActivities gets the daily activity summary values and detailed activity levels for a specified period of time.
 // If a start and end date are not provided, ie are empty strings, we fall back to Oura's defaults which are:
 //
-//	start_date: end_date - 1 day
-//	end_date: current UTC date
-func (c *Client) DailyActivities(ctx context.Context, start_date, end_date, next_token string) (*DailyActivities, *http.Response, error) {
-	path := parametiseDate("v2/usercollection/daily_activity", start_date, end_date, next_token)
+//	startDate: endDate - 1 day
+//	endDate: current UTC date
+func (c *Client) DailyActivities(ctx context.Context, startDate, endDate, nextToken string) (*DailyActivities, *http.Response, error) {
+	path := parametiseDate("v2/usercollection/daily_activity", startDate, endDate, nextToken)
 	req, err := c.NewRequest(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, nil, err

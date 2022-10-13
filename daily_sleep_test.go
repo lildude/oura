@@ -14,57 +14,57 @@ import (
 
 var dailySleepCases = []struct {
 	name        string
-	start_date  string
-	end_date    string
-	next_token  string
+	startDate   string
+	endDate     string
+	nextToken   string
 	expectedURL string
 	mock        string
 }{
 	{
 		name:        "get daily sleep without specific dates",
-		start_date:  "",
-		end_date:    "",
-		next_token:  "",
+		startDate:   "",
+		endDate:     "",
+		nextToken:   "",
 		expectedURL: "/v2/usercollection/daily_sleep",
 		mock:        `testdata/v2/daily_sleep.json`,
 	},
 	{
 		name:        "get daily sleep with only start date",
-		start_date:  "2020-01-20",
-		end_date:    "",
-		next_token:  "",
+		startDate:   "2020-01-20",
+		endDate:     "",
+		nextToken:   "",
 		expectedURL: "/v2/usercollection/daily_sleep?start_date=2020-01-20",
 		mock:        `{}`, // we don't care about the response here
 	},
 	{
 		name:        "get daily sleep with start and end dates",
-		start_date:  "2020-01-20",
-		end_date:    "2020-01-22",
-		next_token:  "",
+		startDate:   "2020-01-20",
+		endDate:     "2020-01-22",
+		nextToken:   "",
 		expectedURL: "/v2/usercollection/daily_sleep?end_date=2020-01-22&start_date=2020-01-20",
 		mock:        `{}`, // we don't care about the response here
 	},
 	{
 		name:        "get daily sleep with next token",
-		start_date:  "",
-		end_date:    "",
-		next_token:  "thisisbase64encodedjson",
+		startDate:   "",
+		endDate:     "",
+		nextToken:   "thisisbase64encodedjson",
 		expectedURL: "/v2/usercollection/daily_sleep?next_token=thisisbase64encodedjson",
 		mock:        `{}`, // We don't care about the response here
 	},
 	{
 		name:        "get daily sleep with start and end dates and next token",
-		start_date:  "2020-01-20",
-		end_date:    "2020-01-22",
-		next_token:  "thisisbase64encodedjson",
+		startDate:   "2020-01-20",
+		endDate:     "2020-01-22",
+		nextToken:   "thisisbase64encodedjson",
 		expectedURL: "/v2/usercollection/daily_sleep?end_date=2020-01-22&next_token=thisisbase64encodedjson&start_date=2020-01-20",
 		mock:        `{}`, // We don't care about the response here
 	},
 	{
 		name:        "get error with dates the wrong way round",
-		start_date:  "2021-10-01",
-		end_date:    "2021-01-01",
-		next_token:  "",
+		startDate:   "2021-10-01",
+		endDate:     "2021-01-01",
+		nextToken:   "",
 		expectedURL: "/v2/usercollection/daily_sleep?end_date=2021-01-01&start_date=2021-10-01",
 		mock: `{
 			"detail": "Start time is greater than end time: [start_time: 2021-10-01 01:02:03+00:00; end_date: 2021-01-01 01:02:03+00:00"
@@ -80,13 +80,13 @@ func TestDailySleep(t *testing.T) {
 				resp, _ := os.ReadFile(tc.mock)
 				mock = string(resp)
 			}
-			testDailySleeps(t, tc.start_date, tc.end_date, tc.next_token, tc.expectedURL, mock)
+			testDailySleeps(t, tc.startDate, tc.endDate, tc.nextToken, tc.expectedURL, mock)
 		})
 	}
 }
 
-func testDailySleeps(t *testing.T, start_date, end_date, next_token, expectedURL, mock string) {
-	client, mux, _, teardown := setup()
+func testDailySleeps(t *testing.T, startDate, endDate, nextToken, expectedURL, mock string) {
+	client, mux, teardown := setup()
 	defer teardown()
 
 	mux.HandleFunc("/v2/usercollection/daily_sleep", func(w http.ResponseWriter, r *http.Request) {
@@ -95,11 +95,11 @@ func testDailySleeps(t *testing.T, start_date, end_date, next_token, expectedURL
 		fmt.Fprint(w, mock)
 	})
 
-	got, _, err := client.DailySleeps(context.Background(), start_date, end_date, next_token)
+	got, _, err := client.DailySleeps(context.Background(), startDate, endDate, nextToken)
 	assert.NoError(t, err, "should not return an error")
 
 	want := &DailySleeps{}
-	json.Unmarshal([]byte(mock), want) //nolint:errcheck
+	json.Unmarshal([]byte(mock), want)
 
 	assert.ObjectsAreEqual(want, got)
 }

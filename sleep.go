@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-// Sleep represents a single sleep entry
+// Sleep represents a single sleep entry.
 type Sleep struct {
 	Awake                     int       `json:"awake"`
 	BedtimeEnd                time.Time `json:"bedtime_end"`
@@ -49,7 +49,7 @@ type Sleep struct {
 	Total                     int       `json:"total"`
 }
 
-// Sleeps represents all sleep periods for the period requested
+// Sleeps represents all sleep periods for the period requested.
 type Sleeps struct {
 	Sleeps []Sleep `json:"sleep"`
 }
@@ -103,7 +103,7 @@ type ReadinessSummary struct {
 //
 //	"If you omit the start date, it will be set to one week ago.
 //	 If you omit the end date, it will be set to the current day."
-func (c *Client) GetSleep(ctx context.Context, start string, end string) (*Sleeps, *http.Response, error) {
+func (c *Client) GetSleep(ctx context.Context, start, end string) (*Sleeps, *http.Response, error) {
 	path := "v1/sleep"
 	params := url.Values{}
 
@@ -134,10 +134,10 @@ func (c *Client) GetSleep(ctx context.Context, start string, end string) (*Sleep
 // Sleeps gets the detailed sleep data for a specified period of time.
 // If a start and end date are not provided, ie are empty strings, we fall back to Oura's defaults which are:
 //
-//	start_date: end_date - 1 day
-//	end_date: current UTC date
-func (c *Client) Sleeps(ctx context.Context, start_date, end_date, next_token string) (*SleepPeriods, *http.Response, error) {
-	path := parametiseDate("v2/usercollection/sleep", start_date, end_date, next_token)
+//	startDate: endDate - 1 day
+//	endDate: current UTC date
+func (c *Client) Sleeps(ctx context.Context, startDate, endDate, nextToken string) (*SleepPeriods, *http.Response, error) {
+	path := parametiseDate("v2/usercollection/sleep", startDate, endDate, nextToken)
 	req, err := c.NewRequest(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, nil, err

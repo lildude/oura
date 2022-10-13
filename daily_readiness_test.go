@@ -14,49 +14,49 @@ import (
 
 var dailyReadinessCases = []struct {
 	name        string
-	start_date  string
-	end_date    string
-	next_token  string
+	startDate   string
+	endDate     string
+	nextToken   string
 	expectedURL string
 	mock        string
 }{
 	{
 		name:        "get daily readiness without specific dates",
-		start_date:  "",
-		end_date:    "",
-		next_token:  "",
+		startDate:   "",
+		endDate:     "",
+		nextToken:   "",
 		expectedURL: "/v2/usercollection/daily_readiness",
 		mock:        `testdata/v2/daily_readiness.json`,
 	},
 	{
 		name:        "get daily readiness with only start date",
-		start_date:  "2020-01-20",
-		end_date:    "",
-		next_token:  "",
+		startDate:   "2020-01-20",
+		endDate:     "",
+		nextToken:   "",
 		expectedURL: "/v2/usercollection/daily_readiness?start_date=2020-01-20",
 		mock:        `{}`, // we don't care about the response here
 	},
 	{
 		name:        "get daily readiness with start and end dates",
-		start_date:  "2020-01-20",
-		end_date:    "2020-01-22",
-		next_token:  "",
+		startDate:   "2020-01-20",
+		endDate:     "2020-01-22",
+		nextToken:   "",
 		expectedURL: "/v2/usercollection/daily_readiness?end_date=2020-01-22&start_date=2020-01-20",
 		mock:        `{}`, // we don't care about the response here
 	},
 	{
 		name:        "get daily readiness with next token",
-		start_date:  "",
-		end_date:    "",
-		next_token:  "thisisbase64encodedjson",
+		startDate:   "",
+		endDate:     "",
+		nextToken:   "thisisbase64encodedjson",
 		expectedURL: "/v2/usercollection/daily_readiness?next_token=thisisbase64encodedjson",
 		mock:        `{}`, // We don't care about the response here
 	},
 	{
 		name:        "get error when dates the wrong way round",
-		start_date:  "2021-10-01",
-		end_date:    "2021-01-01",
-		next_token:  "",
+		startDate:   "2021-10-01",
+		endDate:     "2021-01-01",
+		nextToken:   "",
 		expectedURL: "/v2/usercollection/daily_readiness?end_date=2021-01-01&start_date=2021-10-01",
 		mock: `{
 			"detail": "Start time is greater than end time: [start_time: 2021-10-01 01:02:03+00:00; end_date: 2021-01-01 01:02:03+00:00"
@@ -72,13 +72,13 @@ func TestDailyReadiness(t *testing.T) {
 				resp, _ := os.ReadFile(tc.mock)
 				mock = string(resp)
 			}
-			testDailyReadinesses(t, tc.start_date, tc.end_date, tc.next_token, tc.expectedURL, mock)
+			testDailyReadinesses(t, tc.startDate, tc.endDate, tc.nextToken, tc.expectedURL, mock)
 		})
 	}
 }
 
-func testDailyReadinesses(t *testing.T, start_date, end_date, next_token, expectedURL, mock string) {
-	client, mux, _, teardown := setup()
+func testDailyReadinesses(t *testing.T, startDate, endDate, nextToken, expectedURL, mock string) {
+	client, mux, teardown := setup()
 	defer teardown()
 
 	mux.HandleFunc("/v2/usercollection/daily_readiness", func(w http.ResponseWriter, r *http.Request) {
@@ -87,11 +87,11 @@ func testDailyReadinesses(t *testing.T, start_date, end_date, next_token, expect
 		fmt.Fprint(w, mock)
 	})
 
-	got, _, err := client.DailyReadinesses(context.Background(), start_date, end_date, next_token)
+	got, _, err := client.DailyReadinesses(context.Background(), startDate, endDate, nextToken)
 	assert.NoError(t, err, "should not return an error")
 
 	want := &DailyReadinesses{}
-	json.Unmarshal([]byte(mock), want) //nolint:errcheck
+	json.Unmarshal([]byte(mock), want)
 
 	assert.ObjectsAreEqual(want, got)
 }

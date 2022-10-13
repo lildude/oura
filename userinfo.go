@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// UserInfo is the information for the current user
+// UserInfo is the information for the current user.
 type UserInfo struct {
 	Age    int     `json:"age"`
 	Email  string  `json:"email"`
@@ -14,7 +14,7 @@ type UserInfo struct {
 	Weight float64 `json:"weight"`
 }
 
-// GetUserInfo returns the user information for the current user
+// GetUserInfo returns the user information for the current user.
 func (c *Client) GetUserInfo(ctx context.Context) (*UserInfo, *http.Response, error) {
 	req, err := c.NewRequest(ctx, "GET", "v1/userinfo", nil)
 	if err != nil {

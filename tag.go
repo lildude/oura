@@ -31,10 +31,10 @@ type Tags struct {
 // Tags gets the tag data within a given timeframe.
 // If a start and end date are not provided, ie are empty strings, we fall back to Oura's defaults which are:
 //
-//	start_date: end_date - 1 day
-//	end_date: current UTC date
-func (c *Client) Tags(ctx context.Context, start_date, end_date, next_token string) (*Tags, *http.Response, error) {
-	path := parametiseDate("v2/usercollection/tag", start_date, end_date, next_token)
+//	startDate: endDate - 1 day
+//	endDate: current UTC date
+func (c *Client) Tags(ctx context.Context, startDate, endDate, nextToken string) (*Tags, *http.Response, error) {
+	path := parametiseDate("v2/usercollection/tag", startDate, endDate, nextToken)
 	req, err := c.NewRequest(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, nil, err

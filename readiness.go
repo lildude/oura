@@ -7,7 +7,7 @@ import (
 	"net/url"
 )
 
-// Readiness represents a single readiness entry
+// Readiness represents a single readiness entry.
 type Readiness struct {
 	PeriodID             int    `json:"period_id"`
 	RestModeState        int    `json:"rest_mode_state"`
@@ -23,16 +23,17 @@ type Readiness struct {
 	SummaryDate          string `json:"summary_date"`
 }
 
-// ReadinessSummaries represents all readiness periods for the period requested
+// ReadinessSummaries represents all readiness periods for the period requested.
 type ReadinessSummaries struct {
 	ReadinessSummaries []Readiness `json:"readiness"`
 }
 
 // GetReadiness gets all of the readiness entries for a specified period of time.
 // If a start and end date are not provided, ie are empty strings, we fall back to Oura which states:
-// 	"If you omit the start date, it will be set to one week ago.
+//
+//	"If you omit the start date, it will be set to one week ago.
 //	 If you omit the end date, it will be set to the current day."
-func (c *Client) GetReadiness(ctx context.Context, start string, end string) (*ReadinessSummaries, *http.Response, error) {
+func (c *Client) GetReadiness(ctx context.Context, start, end string) (*ReadinessSummaries, *http.Response, error) {
 	path := "v1/readiness"
 	params := url.Values{}
 
