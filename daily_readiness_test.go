@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -24,26 +26,7 @@ var dailyReadinessCases = []struct {
 		end_date:    "",
 		next_token:  "",
 		expectedURL: "/v2/usercollection/daily_readiness",
-		mock: `{
-			"data": [{
-				"contributors": {
-					"activity_balance": 56,
-					"body_temperature": 98,
-					"hrv_balance": 75,
-					"previous_day_activity": null,
-					"previous_night": 35,
-					"recovery_index": 47,
-					"resting_heart_rate": 94,
-					"sleep_balance": 73
-				},
-				"day": "2021-10-27",
-				"score": 66,
-				"temperature_deviation": -0.2,
-				"temperature_trend_deviation": 0.1,
-				"timestamp": "2021-10-27T00:00:00+00:00"
-			}],
-			"next_token": null
-		}`,
+		mock:        `testdata/v2/daily_readiness.json`,
 	},
 	{
 		name:        "get daily readiness with only start date",
@@ -84,7 +67,12 @@ var dailyReadinessCases = []struct {
 func TestDailyReadiness(t *testing.T) {
 	for _, tc := range dailyReadinessCases {
 		t.Run(tc.name, func(t *testing.T) {
-			testDailyReadinesses(t, tc.start_date, tc.end_date, tc.next_token, tc.expectedURL, tc.mock)
+			mock := tc.mock
+			if strings.HasPrefix(tc.mock, "testdata/") {
+				resp, _ := os.ReadFile(tc.mock)
+				mock = string(resp)
+			}
+			testDailyReadinesses(t, tc.start_date, tc.end_date, tc.next_token, tc.expectedURL, mock)
 		})
 	}
 }

@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -24,23 +26,7 @@ var dailySleepCases = []struct {
 		end_date:    "",
 		next_token:  "",
 		expectedURL: "/v2/usercollection/daily_sleep",
-		mock: `{
-			"data": [{
-				"contributors": {
-					"deep_sleep": 57,
-					"efficiency": 98,
-					"latency": 81,
-					"rem_sleep": 20,
-					"restfulness": 54,
-					"timing": 84,
-					"total_sleep": 60
-				},
-				"day": "2022-07-14",
-				"score": 63,
-				"timestamp": "2022-07-14T00:00:00+00:00"
-			}],
-			"next_token": null
-		}`,
+		mock:        `testdata/v2/daily_sleep.json`,
 	},
 	{
 		name:        "get daily sleep with only start date",
@@ -89,7 +75,12 @@ var dailySleepCases = []struct {
 func TestDailySleep(t *testing.T) {
 	for _, tc := range dailySleepCases {
 		t.Run(tc.name, func(t *testing.T) {
-			testDailySleeps(t, tc.start_date, tc.end_date, tc.next_token, tc.expectedURL, tc.mock)
+			mock := tc.mock
+			if strings.HasPrefix(tc.mock, "testdata/") {
+				resp, _ := os.ReadFile(tc.mock)
+				mock = string(resp)
+			}
+			testDailySleeps(t, tc.start_date, tc.end_date, tc.next_token, tc.expectedURL, mock)
 		})
 	}
 }

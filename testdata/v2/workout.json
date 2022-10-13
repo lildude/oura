@@ -1,0 +1,27 @@
+{
+  "data": [
+    {
+      "activity": "walking",
+      "calories": 106.206,
+      "day": "2022-04-02",
+      "distance": 2.3,
+      "end_datetime": "2022-04-02T15:12:00+01:00",
+      "intensity": "moderate",
+      "label": "foo",
+      "source": "confirmed",
+      "start_datetime": "2022-04-02T14:41:00+01:00"
+    },
+    {
+      "activity": "cycling",
+      "calories": 350.784,
+      "day": "2022-04-02",
+      "distance": 50.2,
+      "end_datetime": "2022-04-02T20:36:00+01:00",
+      "intensity": "moderate",
+      "label": "bar",
+      "source": "confirmed",
+      "start_datetime": "2022-04-02T19:48:00+01:00"
+    }
+  ],
+  "next_token": "12345"
+}

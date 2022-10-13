@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -24,43 +26,7 @@ var sessionCases = []struct {
 		end_date:    "",
 		next_token:  "",
 		expectedURL: "/v2/usercollection/session",
-		mock: `{
-			"data": [
-				{
-					"day": "2022-01-13",
-					"start_datetime": "2022-01-13T17:43:00+00:00",
-					"end_datetime": "2022-01-13T17:49:10+00:00",
-					"type": "meditation",
-					"heart_rate": {
-						"interval": 5.0,
-						"items": [
-							72.6,
-							72.7
-						],
-						"timestamp": "2022-01-13T17:43:00.000+00:00"
-					},
-					"heart_rate_variability": {
-						"interval": 5.0,
-						"items": [
-							11.0,
-							9.0
-						],
-						"timestamp": "2022-01-13T17:43:00.000+00:00"
-					},
-					"mood": "great",
-					"motion_count": {
-						"interval": 5.0,
-						"items": [
-							0.0,
-							43.0,
-							44.0
-						],
-						"timestamp": "2022-01-13T17:43:00.000+00:00"
-					}
-				}
-			],
-			"next_token": "12345"
-		}`,
+		mock:        `testdata/v2/session.json`,
 	},
 	{
 		name:        "get sessions with only start date",
@@ -91,7 +57,12 @@ var sessionCases = []struct {
 func TestSessions(t *testing.T) {
 	for _, tc := range sessionCases {
 		t.Run(tc.name, func(t *testing.T) {
-			testSessions(t, tc.start_date, tc.end_date, tc.next_token, tc.expectedURL, tc.mock)
+			mock := tc.mock
+			if strings.HasPrefix(tc.mock, "testdata/") {
+				resp, _ := os.ReadFile(tc.mock)
+				mock = string(resp)
+			}
+			testSessions(t, tc.start_date, tc.end_date, tc.next_token, tc.expectedURL, mock)
 		})
 	}
 }
