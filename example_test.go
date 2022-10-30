@@ -14,8 +14,8 @@ import (
 // See the documentation on [Testing](https://golang.org/pkg/testing/#hdr-Examples)
 // for further details.
 
-func Example_getUserInfo() {
-	godotenv.Load(".env") //nolint:errcheck
+func Example_getUserInfo() { //nolint:testableexamples // This is an example of how to use the library, not a test
+	godotenv.Load(".env")
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
 	ctx := context.Background()
 	tc := oauth2.NewClient(ctx, ts)
@@ -32,8 +32,8 @@ func Example_getUserInfo() {
 	// Output
 }
 
-func Example_getSleep() {
-	godotenv.Load(".env") //nolint:errcheck
+func Example_getSleep() { //nolint:testableexamples // This is an example of how to use the library, not a test
+	godotenv.Load(".env")
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
 	ctx := context.Background()
 	tc := oauth2.NewClient(ctx, ts)
@@ -50,8 +50,8 @@ func Example_getSleep() {
 	// Output
 }
 
-func Example_getActivities() {
-	godotenv.Load(".env") //nolint:errcheck
+func Example_getActivities() { //nolint:testableexamples // This is an example of how to use the library, not a test
+	godotenv.Load(".env")
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
 	ctx := context.Background()
 	tc := oauth2.NewClient(ctx, ts)
@@ -68,8 +68,8 @@ func Example_getActivities() {
 	// Output
 }
 
-func Example_dailyActivity() {
-	godotenv.Load(".env") //nolint:errcheck
+func Example_dailyActivity() { //nolint:testableexamples // This is an example of how to use the library, not a test
+	godotenv.Load(".env")
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
 	ctx := context.Background()
 	tc := oauth2.NewClient(ctx, ts)
@@ -85,8 +85,42 @@ func Example_dailyActivity() {
 	// Output
 }
 
-func Example_heartrate() {
-	godotenv.Load(".env") //nolint:errcheck
+func Example_dailyReadiness() { //nolint:testableexamples // This is an example of how to use the library, not a test
+	godotenv.Load(".env")
+	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
+	ctx := context.Background()
+	tc := oauth2.NewClient(ctx, ts)
+
+	cl := oura.NewClient(tc)
+	dailyReadiness, httpResp, err := cl.DailyReadinesses(ctx, "2022-03-20", "2022-03-22", "")
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println(httpResp)
+	} else {
+		fmt.Println(dailyReadiness)
+	}
+	// Output
+}
+
+func Example_dailySleep() { //nolint:testableexamples // This is an example of how to use the library, not a test
+	godotenv.Load(".env")
+	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
+	ctx := context.Background()
+	tc := oauth2.NewClient(ctx, ts)
+
+	cl := oura.NewClient(tc)
+	dailySleeps, httpResp, err := cl.DailySleeps(ctx, "2022-03-20", "2022-03-22", "")
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println(httpResp)
+	} else {
+		fmt.Println(dailySleeps)
+	}
+	// Output
+}
+
+func Example_heartrate() { //nolint:testableexamples // This is an example of how to use the library, not a test
+	godotenv.Load(".env")
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
 	ctx := context.Background()
 	tc := oauth2.NewClient(ctx, ts)
@@ -102,8 +136,8 @@ func Example_heartrate() {
 	// Output
 }
 
-func Example_personalInfo() {
-	godotenv.Load(".env") //nolint:errcheck
+func Example_personalInfo() { //nolint:testableexamples // This is an example of how to use the library, not a test
+	godotenv.Load(".env")
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
 	ctx := context.Background()
 	tc := oauth2.NewClient(ctx, ts)
@@ -119,8 +153,8 @@ func Example_personalInfo() {
 	// Output
 }
 
-func Example_session() {
-	godotenv.Load(".env") //nolint:errcheck
+func Example_session() { //nolint:testableexamples // This is an example of how to use the library, not a test
+	godotenv.Load(".env")
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
 	ctx := context.Background()
 	tc := oauth2.NewClient(ctx, ts)
@@ -136,8 +170,25 @@ func Example_session() {
 	// Output
 }
 
-func Example_tag() {
-	godotenv.Load(".env") //nolint:errcheck
+func Example_sleep() { //nolint:testableexamples // This is an example of how to use the library, not a test
+	godotenv.Load(".env")
+	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
+	ctx := context.Background()
+	tc := oauth2.NewClient(ctx, ts)
+
+	cl := oura.NewClient(tc)
+	sleeps, httpResp, err := cl.Sleeps(ctx, "2022-03-20", "2022-03-22", "")
+	if err != nil {
+		fmt.Println(err)
+		fmt.Println(httpResp)
+	} else {
+		fmt.Println(sleeps)
+	}
+	// Output
+}
+
+func Example_tag() { //nolint:testableexamples // This is an example of how to use the library, not a test
+	godotenv.Load(".env")
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
 	ctx := context.Background()
 	tc := oauth2.NewClient(ctx, ts)
@@ -153,8 +204,8 @@ func Example_tag() {
 	// Output
 }
 
-func Example_workout() {
-	godotenv.Load(".env") //nolint:errcheck
+func Example_workout() { //nolint:testableexamples // This is an example of how to use the library, not a test
+	godotenv.Load(".env")
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: os.Getenv("OURA_ACCESS_TOKEN")})
 	ctx := context.Background()
 	tc := oauth2.NewClient(ctx, ts)

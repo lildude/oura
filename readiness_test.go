@@ -94,7 +94,7 @@ func TestGetReadiness(t *testing.T) {
 }
 
 func testGetReadiness(t *testing.T, start, end, expectedURL, mock string) {
-	client, mux, _, teardown := setup()
+	client, mux, teardown := setup()
 	defer teardown()
 
 	mux.HandleFunc("/v1/readiness", func(w http.ResponseWriter, r *http.Request) {
@@ -107,7 +107,7 @@ func testGetReadiness(t *testing.T, start, end, expectedURL, mock string) {
 	assert.NoError(t, err, "should not return an error")
 
 	want := &ReadinessSummaries{}
-	json.Unmarshal([]byte(mock), want) //nolint:errcheck
+	json.Unmarshal([]byte(mock), want)
 
 	assert.ObjectsAreEqual(want, got)
 }

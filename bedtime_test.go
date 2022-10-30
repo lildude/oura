@@ -102,7 +102,7 @@ func TestGetBedtime(t *testing.T) {
 }
 
 func testGetBedtime(t *testing.T, start, end, expectedURL, mock string) {
-	client, mux, _, teardown := setup()
+	client, mux, teardown := setup()
 	defer teardown()
 
 	mux.HandleFunc("/v1/bedtime", func(w http.ResponseWriter, r *http.Request) {
@@ -115,7 +115,7 @@ func testGetBedtime(t *testing.T, start, end, expectedURL, mock string) {
 	assert.NoError(t, err, "should not return an error")
 
 	want := &IdealBedtimes{}
-	json.Unmarshal([]byte(mock), want) //nolint:errcheck
+	json.Unmarshal([]byte(mock), want)
 
 	assert.ObjectsAreEqual(want, got)
 }

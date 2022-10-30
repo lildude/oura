@@ -1,0 +1,19 @@
+{
+  "data": [
+    {
+      "contributors": {
+          "deep_sleep": 57,
+          "efficiency": 98,
+          "latency": 81,
+          "rem_sleep": 20,
+          "restfulness": 54,
+          "timing": 84,
+          "total_sleep": 60
+      },
+      "day": "2022-07-14",
+      "score": 63,
+      "timestamp": "2022-07-14T00:00:00+00:00"
+  }
+  ],
+  "next_token": null
+}

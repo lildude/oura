@@ -10,12 +10,21 @@ on:
 
 jobs:
   test:
-    name: Run Tests
+    name: Tests
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-go@v2
+      - name: Setup Go
+        uses: actions/setup-go@v3
         with:
-          go-version: '^1.15'
-      - run: go test -v .
+          go-version-file: 'go.mod'
+          cache: true
+
+      - name: Unit Tests
+        run: go test -v .
+
+      - name: Lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: latest
+          skip-cache: true

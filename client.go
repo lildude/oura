@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
@@ -44,7 +43,7 @@ func NewClient(cc *http.Client) *Client {
 // NewRequest creates an HTTP Request. The client baseURL is checked to confirm that it has a trailing
 // slash. A relative URL should be provided without the leading slash. If a non-nil body is provided
 // it will be JSON encoded and included in the request.
-func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Request, error) {
+func (c *Client) NewRequest(ctx context.Context, method, urlStr string, body interface{}) (*http.Request, error) {
 	if !strings.HasSuffix(c.baseURL.Path, "/") {
 		return nil, fmt.Errorf("client baseURL does not have a trailing slash: %q", c.baseURL)
 	}
@@ -59,13 +58,13 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 		buf = new(bytes.Buffer)
 		enc := json.NewEncoder(buf)
 		enc.SetEscapeHTML(false)
-		err := enc.Encode(body)
+		err = enc.Encode(body)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	req, err := http.NewRequest(method, u.String(), buf)
+	req, err := http.NewRequestWithContext(ctx, method, u.String(), buf)
 	if err != nil {
 		return nil, err
 	}
@@ -83,23 +82,22 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 // Do sends a request and returns the response. An error is returned if the request cannot
 // be sent or if the API returns an error. If a response is received, the body response body
 // is decoded and stored in the value pointed to by v.
-func (c *Client) do(ctx context.Context, req *http.Request, v interface{}) (*http.Response, error) {
-	req = req.WithContext(ctx)
+func (c *Client) do(req *http.Request, v interface{}) (*http.Response, error) {
 	resp, err := c.client.Do(req)
 	if err != nil {
 		return nil, err
 	}
+	defer resp.Body.Close()
 
-	data, err := ioutil.ReadAll(resp.Body)
+	data, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
-	resp.Body.Close()
 
 	// Anything other than a HTTP 2xx response code is treated as an error.
-	if resp.StatusCode >= 300 {
+	if resp.StatusCode >= http.StatusMultipleChoices {
 		e := errorDetail{}
-		err := json.Unmarshal(data, &e)
+		err = json.Unmarshal(data, &e)
 		if err != nil {
 			return resp, err
 		}
@@ -111,11 +109,8 @@ func (c *Client) do(ctx context.Context, req *http.Request, v interface{}) (*htt
 	if v != nil && len(data) != 0 {
 		err = json.Unmarshal(data, v)
 
-		switch err {
-		case nil:
-		case io.EOF:
+		if err == nil || errors.Is(err, io.EOF) {
 			err = nil
-		default:
 		}
 	}
 
@@ -124,20 +119,25 @@ func (c *Client) do(ctx context.Context, req *http.Request, v interface{}) (*htt
 
 // timeSeriesData is time series data used by various other methods.
 type timeSeriesData struct {
-	Interval  float32   `json:"interval"`
-	Items     []float32 `json:"items"`
+	// The number of seconds between records
+	Interval float32 `json:"interval"`
+
+	// The recorded values
+	Items []float32 `json:"items"`
+
+	// ISO 8601 formatted local timestamp indicating the start datetime of when the data was collected
 	Timestamp time.Time `json:"timestamp"`
+}
+
+// errorDetail holds the details of an error message.
+type errorDetail struct { //nolint:errname // This isn't an error name.
+	Status *int    `json:"status,omitempty"`
+	Title  *string `json:"title,omitempty"`
+	Detail string  `json:"detail"`
 }
 
 func (e *errorDetail) Error() string {
 	return e.Detail
-}
-
-// errorDetail holds the details of an error message
-type errorDetail struct {
-	Status int    `json:"status,omitempty"`
-	Title  string `json:"title,omitempty"`
-	Detail string `json:"detail"`
 }
 
 // parametiseDate takes the arguments and URL encodes them into a string

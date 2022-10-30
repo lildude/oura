@@ -12,17 +12,17 @@ import (
 
 var tagCases = []struct {
 	name        string
-	start_date  string
-	end_date    string
-	next_token  string
+	startDate   string
+	endDate     string
+	nextToken   string
 	expectedURL string
 	mock        string
 }{
 	{
 		name:        "get tags without specific dates",
-		start_date:  "",
-		end_date:    "",
-		next_token:  "",
+		startDate:   "",
+		endDate:     "",
+		nextToken:   "",
 		expectedURL: "/v2/usercollection/tag",
 		mock: `{
 			"data": [{
@@ -34,30 +34,30 @@ var tagCases = []struct {
 					]
         }
     	],
-   	 "next_token": "12345"
+   	 "nextToken": "12345"
 		}`,
 	},
 	{
 		name:        "get tags with only start date",
-		start_date:  "2020-01-20",
-		end_date:    "",
-		next_token:  "",
+		startDate:   "2020-01-20",
+		endDate:     "",
+		nextToken:   "",
 		expectedURL: "/v2/usercollection/tag?start_date=2020-01-20",
 		mock:        `{}`, // we don't care about the response
 	},
 	{
 		name:        "get tags with start and end dates",
-		start_date:  "2020-01-20",
-		end_date:    "2020-01-22",
-		next_token:  "",
+		startDate:   "2020-01-20",
+		endDate:     "2020-01-22",
+		nextToken:   "",
 		expectedURL: "/v2/usercollection/tag?end_date=2020-01-22&start_date=2020-01-20",
 		mock:        `{}`, // we don't care about the response
 	},
 	{
 		name:        "get tags with next token",
-		start_date:  "",
-		end_date:    "",
-		next_token:  "thisisbase64encodedjson",
+		startDate:   "",
+		endDate:     "",
+		nextToken:   "thisisbase64encodedjson",
 		expectedURL: "/v2/usercollection/tag?next_token=thisisbase64encodedjson",
 		mock:        `{}`, // we don't care about the response
 	},
@@ -66,13 +66,13 @@ var tagCases = []struct {
 func TestTags(t *testing.T) {
 	for _, tc := range tagCases {
 		t.Run(tc.name, func(t *testing.T) {
-			testTags(t, tc.start_date, tc.end_date, tc.next_token, tc.expectedURL, tc.mock)
+			testTags(t, tc.startDate, tc.endDate, tc.nextToken, tc.expectedURL, tc.mock)
 		})
 	}
 }
 
-func testTags(t *testing.T, start_date, end_date, next_token, expectedURL, mock string) {
-	client, mux, _, teardown := setup()
+func testTags(t *testing.T, startDate, endDate, nextToken, expectedURL, mock string) {
+	client, mux, teardown := setup()
 	defer teardown()
 
 	mux.HandleFunc("/v2/usercollection/tag", func(w http.ResponseWriter, r *http.Request) {
@@ -81,11 +81,11 @@ func testTags(t *testing.T, start_date, end_date, next_token, expectedURL, mock 
 		fmt.Fprint(w, mock)
 	})
 
-	got, _, err := client.Tags(context.Background(), start_date, end_date, next_token)
+	got, _, err := client.Tags(context.Background(), startDate, endDate, nextToken)
 	assert.NoError(t, err, "should not return an error")
 
 	want := &Tags{}
-	json.Unmarshal([]byte(mock), want) //nolint:errcheck
+	json.Unmarshal([]byte(mock), want)
 
 	assert.ObjectsAreEqual(want, got)
 }

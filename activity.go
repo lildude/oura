@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-// Activity represents a single activity
+// Activity represents a single activity.
 type Activity struct {
 	AverageMet             float32   `json:"average_met"`
 	CalActive              int       `json:"cal_active"`
@@ -49,16 +49,17 @@ type Activity struct {
 	Total                  int       `json:"total"`
 }
 
-// Activities represents all activities for a the period requested
+// Activities represents all activities for a the period requested.
 type Activities struct {
 	Activities []Activity `json:"activity"`
 }
 
 // GetActivities gets all of the activities for a specified period of time.
 // If a start and end date are not provided, ie are empty strings, we fall back to Oura which states:
-// 	"If you omit the start date, it will be set to one week ago.
+//
+//	"If you omit the start date, it will be set to one week ago.
 //	 If you omit the end date, it will be set to the current day."
-func (c *Client) GetActivities(ctx context.Context, start string, end string) (*Activities, *http.Response, error) {
+func (c *Client) GetActivities(ctx context.Context, start, end string) (*Activities, *http.Response, error) {
 	path := "v1/activity"
 	params := url.Values{}
 
@@ -72,13 +73,13 @@ func (c *Client) GetActivities(ctx context.Context, start string, end string) (*
 		path += fmt.Sprintf("?%s", params.Encode())
 	}
 
-	req, err := c.NewRequest("GET", path, nil)
+	req, err := c.NewRequest(ctx, "GET", path, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
 	var activities *Activities
-	resp, err := c.do(ctx, req, &activities)
+	resp, err := c.do(req, &activities)
 	if err != nil {
 		return activities, resp, err
 	}

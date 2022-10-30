@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -12,67 +14,41 @@ import (
 
 var workoutCases = []struct {
 	name        string
-	start_date  string
-	end_date    string
-	next_token  string
+	startDate   string
+	endDate     string
+	nextToken   string
 	expectedURL string
 	mock        string
 }{
 	{
 		name:        "get workouts without specific dates",
-		start_date:  "",
-		end_date:    "",
-		next_token:  "",
+		startDate:   "",
+		endDate:     "",
+		nextToken:   "",
 		expectedURL: "/v2/usercollection/workout",
-		mock: `{
-			"data": [
-				{
-					"activity": "walking",
-					"calories": 106.206,
-					"day": "2022-04-02",
-					"distance": 2.3,
-					"end_datetime": "2022-04-02T15:12:00+01:00",
-					"intensity": "moderate",
-					"label": "foo",
-					"source": "confirmed",
-					"start_datetime": "2022-04-02T14:41:00+01:00"
-				},
-				{
-					"activity": "cycling",
-					"calories": 350.784,
-					"day": "2022-04-02",
-					"distance": 50.2,
-					"end_datetime": "2022-04-02T20:36:00+01:00",
-					"intensity": "moderate",
-					"label": "bar",
-					"source": "confirmed",
-					"start_datetime": "2022-04-02T19:48:00+01:00"
-				}
-			],
-			"next_token": "12345"
-		}`,
+		mock:        `testdata/v2/workout.json`,
 	},
 	{
 		name:        "get workouts with only start date",
-		start_date:  "2020-01-20",
-		end_date:    "",
-		next_token:  "",
+		startDate:   "2020-01-20",
+		endDate:     "",
+		nextToken:   "",
 		expectedURL: "/v2/usercollection/workout?start_date=2020-01-20",
 		mock:        `{}`, // we don't care about the response
 	},
 	{
 		name:        "get workouts with start and end dates",
-		start_date:  "2020-01-20",
-		end_date:    "2020-01-22",
-		next_token:  "",
+		startDate:   "2020-01-20",
+		endDate:     "2020-01-22",
+		nextToken:   "",
 		expectedURL: "/v2/usercollection/workout?end_date=2020-01-22&start_date=2020-01-20",
 		mock:        `{}`, // we don't care about the response
 	},
 	{
 		name:        "get workouts with next token",
-		start_date:  "",
-		end_date:    "",
-		next_token:  "thisisbase64encodedjson",
+		startDate:   "",
+		endDate:     "",
+		nextToken:   "thisisbase64encodedjson",
 		expectedURL: "/v2/usercollection/workout?next_token=thisisbase64encodedjson",
 		mock:        `{}`, // we don't care about the response
 	},
@@ -81,13 +57,18 @@ var workoutCases = []struct {
 func TestWorkouts(t *testing.T) {
 	for _, tc := range workoutCases {
 		t.Run(tc.name, func(t *testing.T) {
-			testWorkouts(t, tc.start_date, tc.end_date, tc.next_token, tc.expectedURL, tc.mock)
+			mock := tc.mock
+			if strings.HasPrefix(tc.mock, "testdata/") {
+				resp, _ := os.ReadFile(tc.mock)
+				mock = string(resp)
+			}
+			testWorkouts(t, tc.startDate, tc.endDate, tc.nextToken, tc.expectedURL, mock)
 		})
 	}
 }
 
-func testWorkouts(t *testing.T, start_date, end_date, next_token, expectedURL, mock string) {
-	client, mux, _, teardown := setup()
+func testWorkouts(t *testing.T, startDate, endDate, nextToken, expectedURL, mock string) {
+	client, mux, teardown := setup()
 	defer teardown()
 
 	mux.HandleFunc("/v2/usercollection/workout", func(w http.ResponseWriter, r *http.Request) {
@@ -96,10 +77,10 @@ func testWorkouts(t *testing.T, start_date, end_date, next_token, expectedURL, m
 		fmt.Fprint(w, mock)
 	})
 
-	got, _, err := client.Workouts(context.Background(), start_date, end_date, next_token)
+	got, _, err := client.Workouts(context.Background(), startDate, endDate, nextToken)
 	assert.NoError(t, err, "should not return an error")
 
 	want := &Workouts{}
-	json.Unmarshal([]byte(mock), want) //nolint:errcheck
+	json.Unmarshal([]byte(mock), want)
 	assert.ObjectsAreEqual(want, got)
 }
