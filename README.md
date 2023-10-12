@@ -1,5 +1,15 @@
 # Oura
 
+> [!IMPORTANT]
+> This project has been archived in favour of using <https://github.com/deepmap/oapi-codegen> to generate the necessary libraries directly from Oura's OpenAPI specification.
+>
+> `opai-codegen` generates files almost identical to those in this project, but comes with the advantage that it reads directly from Oura's spec file so all you need to do is rebuild your app and you get support for the latest endpoints.
+>
+> Oura's spec is well maintained as features are added, doesn't have errors and works a treat.
+> If there are any problems as a result of changes to the spec, you have a formal support channel in for the form of Oura too.
+
+---
+
 ![Tests Status Badge](https://github.com/lildude/oura/workflows/Tests/badge.svg)
 
 An unofficial Go client for the [Oura Cloud API v1](https://cloud.ouraring.com/docs/) and [Oura Cloud API v2](https://cloud.ouraring.com/v2/docs/).
